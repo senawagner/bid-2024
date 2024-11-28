@@ -114,8 +114,22 @@ class Database {
             error_log("SQL preparado: " . $sql);
             error_log("Parâmetros: " . json_encode($params));
             
+            // Bind dos parâmetros com tipo correto
+            foreach ($params as $key => $value) {
+                // Remove : do nome do parâmetro se existir
+                $param = strpos($key, ':') === 0 ? substr($key, 1) : $key;
+                
+                if (is_int($value)) {
+                    $stmt->bindValue(":{$param}", $value, PDO::PARAM_INT);
+                    error_log("Bind INT - :{$param} = {$value}");
+                } else {
+                    $stmt->bindValue(":{$param}", $value, PDO::PARAM_STR);
+                    error_log("Bind STR - :{$param} = {$value}");
+                }
+            }
+            
             // Tenta executar
-            $result = $stmt->execute($params);
+            $result = $stmt->execute();
             error_log("Comando executado: " . ($result ? 'Sucesso' : 'Falha'));
             
             if (!$result) {
@@ -130,6 +144,7 @@ class Database {
             error_log("Código do erro: " . $e->getCode());
             error_log("Mensagem: " . $e->getMessage());
             error_log("SQL State: " . $e->errorInfo[0]);
+            error_log("Stack trace: " . $e->getTraceAsString());
             
             if ($e->getCode() == 23000) {
                 throw new Exception("Registro duplicado. Verifique o CNPJ informado.");

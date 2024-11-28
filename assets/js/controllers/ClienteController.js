@@ -46,10 +46,13 @@ class ClienteController {
                         render: function(data) {
                             return `
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-info" onclick="clienteController.editar(${data.id})">
+                                    <button type="button" class="btn btn-sm btn-info" onclick="window.clienteController.visualizar(${data.id})" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="window.clienteController.editar(${data.id})" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="clienteController.excluir(${data.id})">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="window.clienteController.excluir(${data.id})" title="Excluir">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -84,10 +87,17 @@ class ClienteController {
     }
 
     initMasks() {
-        $('#cnpj').mask('00.000.000/0000-00');
-        $('#telefone').mask('(00) 0000-0000');
-        $('#celular').mask('(00) 00000-0000');
-        $('#cep').mask('00000-000');
+        try {
+            Logger.debug('Inicializando máscaras');
+            $('#cnpj').mask('00.000.000/0000-00');
+            $('#telefone').mask('(00) 0000-0000');
+            $('#celular').mask('(00) 00000-0000');
+            $('#cep').mask('00000-000');
+            Logger.debug('Máscaras inicializadas com sucesso');
+        } catch (error) {
+            Logger.error('Erro ao inicializar máscaras', error);
+            Toast.error('Erro ao inicializar máscaras dos campos');
+        }
     }
 
     initCepSearch() {
@@ -157,23 +167,70 @@ class ClienteController {
         }
     }
 
-    async editar(id) {
+    novo() {
         try {
+            Logger.info('Abrindo modal para novo cliente');
+            const modalElement = document.getElementById('modalCliente');
+            if (!modalElement) {
+                throw new Error('Modal não encontrado');
+            }
+
+            const form = document.getElementById('formCliente');
+            if (form) {
+                form.reset();
+            }
+            document.getElementById('id').value = '';
+
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            Logger.debug('Modal de novo cliente aberto com sucesso');
+        } catch (error) {
+            Logger.error('Erro ao abrir modal de novo cliente', error);
+            Toast.error('Erro ao abrir formulário');
+        }
+    }
+
+    async editar(id, visualizar = false) {
+        try {
+            Logger.debug('Editando cliente', { id });
             const cliente = await this.service.buscar(id);
             if (cliente) {
                 Object.keys(cliente).forEach(key => {
                     const input = document.getElementById(key);
                     if (input) {
-                        input.value = cliente[key];
+                        input.value = cliente[key] || '';
+                        if (visualizar) {
+                            input.disabled = true;
+                        }
                     }
                 });
 
-                const modal = new bootstrap.Modal(document.getElementById('modalCliente'));
+                const modalElement = document.getElementById('modalCliente');
+                if (!modalElement) {
+                    throw new Error('Modal não encontrado');
+                }
+
+                const modal = new bootstrap.Modal(modalElement);
                 modal.show();
+
+                const btnSalvar = document.getElementById('btnSalvarCliente');
+                if (btnSalvar) {
+                    btnSalvar.style.display = visualizar ? 'none' : 'block';
+                }
             }
         } catch (error) {
             Logger.error('Erro ao editar cliente', error);
             Toast.error('Erro ao carregar dados do cliente');
+        }
+    }
+
+    visualizar(id) {
+        try {
+            Logger.debug('Visualizando cliente', { id });
+            this.editar(id, true);
+        } catch (error) {
+            Logger.error('Erro ao visualizar cliente', error);
+            Toast.error('Erro ao visualizar cliente');
         }
     }
 
@@ -211,25 +268,44 @@ class ClienteController {
     }
 
     initEventListeners() {
-        const btnNovo = document.getElementById('btnNovoCliente');
-        if (btnNovo) {
-            btnNovo.addEventListener('click', () => {
-                this.abrirModalCadastro();
-            });
-        }
+        try {
+            Logger.debug('Inicializando event listeners');
+            
+            // Botão Novo Cliente
+            const btnNovo = document.querySelector('[data-action="novo-cliente"]');
+            if (btnNovo) {
+                btnNovo.addEventListener('click', () => this.novo());
+            }
 
-        const btnSalvar = document.getElementById('btnSalvarCliente');
-        if (btnSalvar) {
-            btnSalvar.addEventListener('click', () => {
-                this.salvar();
-            });
-        }
+            // Botão Salvar
+            const btnSalvar = document.getElementById('btnSalvarCliente');
+            if (btnSalvar) {
+                btnSalvar.addEventListener('click', () => this.salvar());
+            }
 
-        const btnSair = document.getElementById('btnSair');
-        if (btnSair) {
-            btnSair.addEventListener('click', () => {
-                Auth.logout();
-            });
+            // Botão Fechar Modal
+            const modalElement = document.getElementById('modalCliente');
+            if (modalElement) {
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    const form = document.getElementById('formCliente');
+                    if (form) {
+                        form.reset();
+                        // Reabilita os campos caso tenham sido desabilitados na visualização
+                        Array.from(form.elements).forEach(element => {
+                            element.disabled = false;
+                        });
+                    }
+                    // Mostra o botão salvar novamente
+                    const btnSalvar = document.getElementById('btnSalvarCliente');
+                    if (btnSalvar) {
+                        btnSalvar.style.display = 'block';
+                    }
+                });
+            }
+
+            Logger.debug('Event listeners inicializados com sucesso');
+        } catch (error) {
+            Logger.error('Erro ao inicializar event listeners', error);
         }
     }
 
@@ -242,10 +318,10 @@ class ClienteController {
 
             const dados = {
                 id: document.getElementById('id').value,
-                razao_social: document.getElementById('razao_social').value,
-                nome_fantasia: document.getElementById('nome_fantasia').value,
+                razao_social: document.getElementById('razaoSocial').value,
+                nome_fantasia: document.getElementById('nomeFantasia').value,
                 cnpj: document.getElementById('cnpj').value,
-                inscricao_estadual: document.getElementById('inscricao_estadual').value,
+                inscricao_estadual: document.getElementById('inscricaoEstadual').value,
                 email: document.getElementById('email').value,
                 telefone: document.getElementById('telefone').value,
                 celular: document.getElementById('celular').value,
@@ -262,18 +338,25 @@ class ClienteController {
             const response = await this.service.salvar(dados);
             
             if (response.success) {
-                Toast.success('Cliente salvo com sucesso');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalCliente'));
+                const modal = document.getElementById('modalCliente');
                 if (modal) {
-                    modal.hide();
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    } else {
+                        $(modal).modal('hide');
+                    }
                 }
                 await this.carregarClientes();
-            } else {
-                Toast.error(response.message || 'Erro ao salvar cliente');
+                Toast.success(response.message || 'Cliente salvo com sucesso');
             }
         } catch (error) {
             Logger.error('Erro ao salvar cliente', error);
-            Toast.error('Erro ao salvar cliente');
+            if (error.response?.data?.message) {
+                Toast.error(error.response.data.message);
+            } else {
+                Toast.error('Erro ao salvar cliente');
+            }
         }
     }
 } 

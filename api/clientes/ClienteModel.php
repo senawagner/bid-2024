@@ -11,14 +11,30 @@ class ClienteModel {
     }
     
     /**
-     * Lista todos os clientes ativos e não excluídos
+     * Lista todos os clientes ativos
      */
     public function listar() {
-        $sql = "SELECT * FROM clientes 
-                WHERE deleted_at IS NULL 
-                ORDER BY razao_social ASC";
-                
-        return $this->db->query($sql);
+        try {
+            error_log("=== INÍCIO LISTAGEM ===");
+            
+            $sql = "SELECT * FROM clientes 
+                    WHERE ativo = 1 
+                    ORDER BY razao_social ASC";
+            
+            error_log("SQL: " . $sql);
+            
+            $result = $this->db->query($sql);
+            error_log("Total de registros: " . count($result));
+            error_log("=== FIM LISTAGEM ===");
+            
+            return $result;
+            
+        } catch (Exception $e) {
+            error_log("=== ERRO NA LISTAGEM ===");
+            error_log("Erro: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            throw new Exception("Erro ao listar clientes: " . $e->getMessage());
+        }
     }
     
     /**
@@ -26,17 +42,27 @@ class ClienteModel {
      */
     public function buscar(int $id) {
         try {
+            error_log("=== INÍCIO BUSCA ===");
+            error_log("Buscando cliente ID: " . $id);
+            
             $sql = "SELECT * FROM clientes 
                     WHERE id = :id 
-                    AND ativo = 1
-                    AND deleted_at IS NULL";
-                    
+                    AND ativo = 1";
+            
+            error_log("SQL: " . $sql);
+            error_log("Parâmetros: " . json_encode(['id' => $id]));
+            
             $result = $this->db->query($sql, ['id' => $id]);
+            error_log("Registro encontrado: " . ($result ? json_encode($result[0]) : 'null'));
+            error_log("=== FIM BUSCA ===");
+            
             return $result[0] ?? null;
             
         } catch (Exception $e) {
-            error_log("Erro ao buscar cliente: " . $e->getMessage());
-            throw new Exception("Erro ao buscar cliente");
+            error_log("=== ERRO NA BUSCA ===");
+            error_log("Erro: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            throw new Exception("Erro ao buscar cliente: " . $e->getMessage());
         }
     }
     
@@ -48,7 +74,7 @@ class ClienteModel {
             error_log("=== INÍCIO DA EXCLUSÃO ===");
             error_log("Tentando excluir cliente ID: " . $id);
             
-            // Primeiro verifica se o cliente existe e não está excluído
+            // Primeiro verifica se o cliente existe e está ativo
             $cliente = $this->buscar($id);
             error_log("Resultado da busca do cliente: " . ($cliente ? json_encode($cliente) : 'null'));
             
@@ -64,21 +90,17 @@ class ClienteModel {
                 throw new Exception("Cliente não pode ser excluído pois possui registros vinculados");
             }
             
-            // Atualiza o registro marcando como excluído
+            // Atualiza o registro marcando como inativo
             $sql = "UPDATE clientes 
                     SET ativo = 0,
-                        deleted_at = CURRENT_TIMESTAMP,
                         atualizado_em = CURRENT_TIMESTAMP 
                     WHERE id = :id 
-                    AND deleted_at IS NULL";
+                    AND ativo = 1";
             
             error_log("SQL de exclusão: " . $sql);
             error_log("Parâmetros: " . json_encode(['id' => $id]));
-            // Tenta executar a query diretamente primeiro
-            $testeSql = str_replace(':id', (string)$id, $sql);
-            error_log("SQL para teste direto: " . $testeSql);
             
-            $result = $this->db->execute($sql, ['id' => (string)$id]);
+            $result = $this->db->execute($sql, ['id' => $id]);
             error_log("Resultado da exclusão: " . ($result ? 'true' : 'false'));
             error_log("=== FIM DA EXCLUSÃO ===");
             
@@ -96,13 +118,40 @@ class ClienteModel {
      * Verifica se cliente pode ser excluído
      */
     public function podeExcluir(int $id): bool {
-        $sql = "SELECT 
-            (SELECT COUNT(*) FROM contratos WHERE cliente_id = :id AND deleted_at IS NULL) +
-            (SELECT COUNT(*) FROM ordens_servico WHERE cliente_id = :id AND deleted_at IS NULL) +
-            (SELECT COUNT(*) FROM faturas WHERE cliente_id = :id AND deleted_at IS NULL) as total";
-                
-        $result = $this->db->query($sql, ['id' => $id]);
-        return (int)$result[0]['total'] === 0;
+        try {
+            error_log("=== INÍCIO VERIFICAÇÃO PODE EXCLUIR ===");
+            error_log("Verificando se cliente ID {$id} pode ser excluído");
+            
+            $sql = "SELECT 
+                (SELECT COUNT(*) FROM contratos 
+                 WHERE cliente_id = :id 
+                 AND status NOT IN ('rejeitado', 'cancelado')) +
+                (SELECT COUNT(*) FROM ordens_servico 
+                 WHERE cliente_id = :id 
+                 AND status NOT IN ('cancelada')
+                 AND deleted_at IS NULL) +
+                (SELECT COUNT(*) FROM faturas 
+                 WHERE cliente_id = :id 
+                 AND status NOT IN ('cancelada')
+                 AND deleted_at IS NULL) as total";
+            
+            error_log("SQL: " . $sql);
+            error_log("Parâmetros: " . json_encode(['id' => $id]));
+            
+            $result = $this->db->query($sql, ['id' => $id]);
+            $total = (int)($result[0]['total'] ?? 0);
+            
+            error_log("Total de registros vinculados: " . $total);
+            error_log("=== FIM VERIFICAÇÃO PODE EXCLUIR ===");
+            
+            return $total === 0;
+            
+        } catch (Exception $e) {
+            error_log("=== ERRO AO VERIFICAR SE PODE EXCLUIR ===");
+            error_log("Erro: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            throw new Exception("Erro ao verificar se cliente pode ser excluído: " . $e->getMessage());
+        }
     }
     
     /**
@@ -179,7 +228,7 @@ class ClienteModel {
                         observacoes = :observacoes,
                         atualizado_em = CURRENT_TIMESTAMP
                         WHERE id = :id 
-                        AND deleted_at IS NULL";
+                        AND ativo = 1";
                         
                 $this->db->execute($sql, $dados);
                 return (int)$dados['id'];

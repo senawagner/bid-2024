@@ -1,5 +1,5 @@
 const Auth = {
-    debug: true, // Habilita logs detalhados
+    debug: true,
     
     log(...args) {
         if (this.debug) {
@@ -34,15 +34,17 @@ const Auth = {
         const currentPath = window.location.pathname;
         const isLoginPage = currentPath.includes('login.html');
         
-        this.log({
+        this.log('Contexto:', {
             currentPath,
             isLoginPage,
             hasToken: !!this.token,
-            hasUser: !!this.usuario
+            hasUser: !!this.usuario,
+            token: this.token,
+            usuario: this.usuario
         });
         
         if (!this.token || !this.usuario) {
-            this.log('Token ou usuário não encontrado');
+            this.error('Autenticação falhou: Token ou usuário não encontrado');
             if (!isLoginPage) {
                 Toast.warning('Sua sessão expirou. Por favor, faça login novamente.');
                 this.log('Redirecionando para login...');
@@ -52,74 +54,54 @@ const Auth = {
         }
 
         try {
-            // Decodifica o token (base64)
-            const tokenData = JSON.parse(atob(this.token));
-            this.log('Dados do token:', {
-                ...tokenData,
-                exp: new Date(tokenData.exp * 1000).toLocaleString(),
-                now: new Date().toLocaleString()
+            this.log('Verificando token no servidor...');
+            const response = await axios.post('../api/auth/verificar.php', null, {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
             });
             
-            // Verifica se o token expira em menos de 1 minuto
-            const now = Date.now() / 1000;
-            const expiraEm = tokenData.exp - now;
+            this.log('Resposta do servidor:', response.data);
             
-            this.log('Token expira em:', {
-                segundos: expiraEm,
-                minutos: expiraEm / 60,
-                horas: expiraEm / 3600
-            });
+            if (!response.data.success) {
+                throw new Error(response.data.message || 'Falha na verificação do token');
+            }
             
-            if (expiraEm < 60) { // Se expira em menos de 1 minuto
-                this.error('Token próximo de expirar ou expirado', {
-                    expiration: new Date(tokenData.exp * 1000).toLocaleString(),
-                    now: new Date(now * 1000).toLocaleString()
-                });
-                Toast.warning('Sua sessão está expirando. Por favor, faça login novamente.');
-                await this.logout();
-                return false;
-            }
-
-            if (isLoginPage) {
-                this.log('Usuário já autenticado, redirecionando para dashboard...');
-                window.location.href = '../pages/dashboard.html';
-                return true;
-            }
-
-            // Atualiza o nome do usuário na interface
-            if (this.usuario && this.usuario.nome) {
-                document.getElementById('userName').textContent = this.usuario.nome;
-            }
-
             this.log('=== Verificação de autenticação concluída com sucesso ===');
             return true;
-        } catch (e) {
-            this.error('Erro ao verificar token:', e);
-            Toast.error('Erro ao verificar autenticação. Por favor, faça login novamente.');
-            await this.logout();
+            
+        } catch (error) {
+            this.error('Erro na verificação:', error.response?.data || error.message);
+            
+            if (!isLoginPage) {
+                Toast.error('Erro de autenticação: ' + (error.response?.data?.message || error.message));
+                this.log('Redirecionando para login devido a erro...');
+                window.location.href = '../pages/login.html';
+            }
             return false;
         }
     },
 
-    async logout() {
-        this.log('Realizando logout');
-        try {
-            localStorage.clear();
-            Toast.info('Logout realizado com sucesso');
-            window.location.href = '../pages/login.html';
-        } catch (e) {
-            this.error('Erro ao realizar logout:', e);
-            Toast.error('Erro ao realizar logout');
-        }
+    logout() {
+        this.log('=== Iniciando logout ===');
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        this.log('Token e usuário removidos');
+        window.location.href = '../pages/login.html';
     },
 
     setupAxiosInterceptors() {
+        this.log('=== Configurando interceptadores do Axios ===');
+        
         axios.interceptors.request.use(
             (config) => {
                 this.log('Interceptando requisição:', config.url);
                 const token = this.token;
                 if (token) {
+                    this.log('Adicionando token à requisição');
                     config.headers.Authorization = `Bearer ${token}`;
+                } else {
+                    this.log('Nenhum token disponível para a requisição');
                 }
                 return config;
             },
@@ -132,13 +114,22 @@ const Auth = {
 
         axios.interceptors.response.use(
             (response) => {
-                this.log('Resposta recebida:', response.config.url);
+                this.log('Resposta recebida:', {
+                    url: response.config.url,
+                    status: response.status,
+                    data: response.data
+                });
                 return response;
             },
             async (error) => {
-                this.error('Erro na resposta:', error);
+                this.error('Erro na resposta:', {
+                    url: error.config?.url,
+                    status: error.response?.status,
+                    data: error.response?.data,
+                    message: error.message
+                });
                 
-                if (error.response && error.response.status === 401) {
+                if (error.response?.status === 401) {
                     Toast.warning('Sua sessão expirou. Por favor, faça login novamente.');
                     await this.logout();
                 } else {
@@ -148,6 +139,8 @@ const Auth = {
                 return Promise.reject(error);
             }
         );
+        
+        this.log('=== Interceptadores configurados com sucesso ===');
     }
 };
 
@@ -155,10 +148,7 @@ const Auth = {
 document.addEventListener('DOMContentLoaded', () => {
     Auth.log('=== Inicializando Auth ===');
     Auth.setupAxiosInterceptors();
-    
-    // Atualiza o nome do usuário se estiver disponível
-    if (Auth.usuario && Auth.usuario.nome) {
-        document.getElementById('userName').textContent = Auth.usuario.nome;
-    }
     Auth.verificarAuth();
 });
+
+export default Auth;

@@ -88,873 +88,189 @@
                     <section id="visao-geral" class="mb-5">
                         <h1>Visão Geral</h1>
                         <div id="descricao">
-                            <h2>Descrição</h2>
-                            <p>O BID System é uma aplicação web desenvolvida para gerenciamento de contratos, ordens de serviço e faturamento. O sistema oferece uma interface moderna e intuitiva, construída com foco em performance e usabilidade.</p>
-                        </div>
-                        
-                        <div id="objetivos">
-                            <h2>Objetivos</h2>
+                            <p>O BID System é um sistema de gerenciamento de manutenções preventivas desenvolvido para otimizar e controlar processos de manutenção em equipamentos e instalações. O sistema oferece uma solução completa para planejamento, execução e acompanhamento de manutenções preventivas.</p>
+                            
+                            <h2>Objetivos Principais</h2>
                             <ul>
-                                <li>Gerenciamento eficiente de contratos e ordens de serviço</li>
-                                <li>Controle de usuários e permissões</li>
-                                <li>Interface responsiva e moderna</li>
-                                <li>Performance otimizada</li>
-                            </ul>
-                        </div>
-                    </section>
-
-                    <!-- Stack Tecnológico -->
-                    <section id="stack" class="mb-5">
-                        <h1>Stack Tecnológico</h1>
-                        
-                        <div id="frontend">
-                            <h2>Frontend</h2>
-                            <ul>
-                                <li>HTML5</li>
-                                <li>CSS3 (Bootstrap 4.6)</li>
-                                <li>JavaScript (ES6+)</li>
-                                <li>AdminLTE 3.2</li>
+                                <li>Gerenciar cronogramas de manutenção preventiva</li>
+                                <li>Controlar ordens de serviço de manutenção</li>
+                                <li>Acompanhar histórico de manutenções</li>
+                                <li>Gerenciar equipes e recursos</li>
+                                <li>Gerar relatórios e indicadores de desempenho</li>
                             </ul>
                         </div>
 
-                        <div id="backend">
-                            <h2>Backend</h2>
-                            <ul>
-                                <li>PHP 8.1</li>
-                                <li>MySQL 8.0</li>
-                            </ul>
-                        </div>
-
-                        <div id="bibliotecas">
-                            <h2>Bibliotecas e Dependências</h2>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Biblioteca</th>
-                                        <th>Versão</th>
-                                        <th>Descrição</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>jQuery</td>
-                                        <td>3.6.0</td>
-                                        <td>Manipulação do DOM e requisições AJAX</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Bootstrap</td>
-                                        <td>4.6.0</td>
-                                        <td>Framework CSS para interface responsiva</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Font Awesome</td>
-                                        <td>5.15.4</td>
-                                        <td>Biblioteca de ícones</td>
-                                    </tr>
-                                    <tr>
-                                        <td>SweetAlert2</td>
-                                        <td>11.0</td>
-                                        <td>Notificações e alertas personalizados</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Mermaid.js</td>
-                                        <td>10.6.1</td>
-                                        <td>Geração de diagramas através de código</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <h3>Detalhes do Mermaid.js</h3>
-                            <div class="card">
-                                <div class="card-body">
-                                    <p>O Mermaid.js é utilizado para gerar diagramas dinâmicos e interativos, incluindo:</p>
+                        <div id="stack-tecnologico" class="mt-4">
+                            <h2>Stack Tecnológico</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3>Frontend</h3>
                                     <ul>
-                                        <li>Diagramas de Fluxo</li>
-                                        <li>Diagramas de Sequência</li>
-                                        <li>Diagramas de Estado</li>
-                                        <li>Diagramas de Classe</li>
-                                        <li>Diagramas ER</li>
+                                        <li>HTML5</li>
+                                        <li>JavaScript (ES6+)</li>
+                                        <li>AdminLTE 3 (Bootstrap)</li>
+                                        <li>Tailwind CSS</li>
+                                        <li>Bibliotecas: Axios, jQuery, Toastr, Chart.js</li>
                                     </ul>
-                                    <p>Exemplo de uso:</p>
-                                    <pre><code class="language-javascript">
-// Inicialização do Mermaid
-mermaid.initialize({
-    startOnLoad: true,
-    theme: 'default',
-    securityLevel: 'loose',
-    flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true
-    }
-});
-                                    </code></pre>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3>Backend</h3>
+                                    <ul>
+                                        <li>PHP 8.3.13</li>
+                                        <li>MySQL</li>
+                                        <li>RESTful API</li>
+                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-
-                    <!-- Arquitetura -->
-                    <section id="arquitetura" class="mb-5">
-                        <h1>Arquitetura do Sistema</h1>
-                        
-                        <div id="visao-arquitetural">
-                            <h2>Visão Geral da Arquitetura</h2>
-                            <div class="diagram">
-                                <pre class="mermaid">
-                                graph TB
-                                    subgraph Frontend
-                                        UI[Interface do Usuário]
-                                        JS[JavaScript Controllers]
-                                        API[API Client]
-                                    end
-                                    
-                                    subgraph Backend
-                                        PHP[PHP API]
-                                        Auth[Autenticação]
-                                        DB[(MySQL)]
-                                    end
-                                    
-                                    UI --> JS
-                                    JS --> API
-                                    API --> PHP
-                                    PHP --> Auth
-                                    PHP --> DB
-                                </pre>
-                            </div>
-                            
-                            <h3>Componentes Principais</h3>
-                            <ul>
-                                <li><strong>Interface do Usuário (UI)</strong>: Construída com AdminLTE, Bootstrap e HTML5</li>
-                                <li><strong>Controllers JavaScript</strong>: Gerenciam a lógica do cliente e interações</li>
-                                <li><strong>API Client</strong>: Responsável pela comunicação com o backend</li>
-                                <li><strong>PHP API</strong>: Processa requisições e implementa regras de negócio</li>
-                                <li><strong>Autenticação</strong>: Gerencia sessões e controle de acesso</li>
-                                <li><strong>Banco de Dados</strong>: Armazena dados do sistema</li>
-                            </ul>
-                        </div>
-
-                        <div id="estrutura-arquivos">
-                            <h2>Estrutura de Arquivos</h2>
-                            <pre class="mermaid">
-                            graph TD
-                                A[bid/] --> B[assets/]
-                                A --> C[docs/]
-                                A --> D[pages/]
-                                A --> E[plugins/]
-                                A --> F[api/]
-                                
-                                B --> G[css/]
-                                B --> H[js/]
-                                B --> I[images/]
-                                
-                                H --> J[auth.js]
-                                H --> K[api.js]
-                                H --> L[usuarios.js]
-                                
-                                D --> M[dashboard.html]
-                                D --> N[usuarios.html]
-                                D --> O[clientes.html]
-                            </pre>
                         </div>
                     </section>
 
                     <!-- Funcionalidades -->
                     <section id="funcionalidades" class="mb-5">
                         <h1>Funcionalidades do Sistema</h1>
-                        
-                        <div id="autenticacao">
-                            <h2>Sistema de Autenticação</h2>
-                            <div class="diagram">
-                                <pre class="mermaid">
-                                sequenceDiagram
-                                    participant U as Usuário
-                                    participant F as Frontend
-                                    participant A as Auth Service
-                                    participant B as Backend
-                                    
-                                    U->>F: Insere credenciais
-                                    F->>A: Valida credenciais
-                                    A->>B: Verifica no banco
-                                    B-->>A: Retorna resultado
-                                    A-->>F: Token JWT
-                                    F->>F: Armazena token
-                                    F-->>U: Redireciona Dashboard
-                                </pre>
-                            </div>
-                            
-                            <h3>Características</h3>
-                            <ul>
-                                <li>Login com username e senha</li>
-                                <li>Tokens JWT para autenticação</li>
-                                <li>Controle de sessão</li>
-                                <li>Níveis de acesso (Admin/Usuário)</li>
-                            </ul>
-                        </div>
 
-                        <div id="gestao-usuarios">
-                            <h2>Gestão de Usuários</h2>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3>CRUD de Usuários</h3>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Operação</th>
-                                                <th>Descrição</th>
-                                                <th>Permissão Necessária</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Criar</td>
-                                                <td>Adicionar novo usuário ao sistema</td>
-                                                <td>Admin</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Listar</td>
-                                                <td>Visualizar todos os usuários</td>
-                                                <td>Admin</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Atualizar</td>
-                                                <td>Modificar dados do usuário</td>
-                                                <td>Admin</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Excluir</td>
-                                                <td>Remover usuário do sistema</td>
-                                                <td>Admin</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <!-- Módulos Implementados -->
+                        <div id="modulos-implementados">
+                            <h2>Módulos Implementados</h2>
+
+                            <div id="autenticacao" class="mb-4">
+                                <h3>Sistema de Autenticação</h3>
+                                <ul>
+                                    <li>Login de usuários</li>
+                                    <li>Recuperação de senha</li>
+                                    <li>Proteção de rotas</li>
+                                    <li>Autenticação baseada em token</li>
+                                    <li>Sistema de logging</li>
+                                </ul>
+                            </div>
+
+                            <div id="usuarios" class="mb-4">
+                                <h3>Gestão de Usuários</h3>
+                                <ul>
+                                    <li>CRUD completo de usuários</li>
+                                    <li>Controle de acesso baseado em perfis</li>
+                                    <li>Interface de gerenciamento</li>
+                                </ul>
+                            </div>
+
+                            <div id="dashboard" class="mb-4">
+                                <h3>Dashboard</h3>
+                                <ul>
+                                    <li>Visão geral do sistema</li>
+                                    <li>Widgets informativos</li>
+                                    <li>Calendário de manutenções</li>
+                                    <li>Estatísticas em tempo real</li>
+                                </ul>
+                            </div>
+
+                            <div id="clientes" class="mb-4">
+                                <h3>Gestão de Clientes</h3>
+                                <ul>
+                                    <li>Cadastro completo</li>
+                                    <li>Listagem e busca</li>
+                                    <li>Edição e exclusão</li>
+                                    <li>Visualização detalhada</li>
+                                </ul>
                             </div>
                         </div>
-                    </section>
 
-                    <!-- API Documentation -->
-                    <section id="api" class="mb-5">
-                        <h1>Documentação da API</h1>
-                        
-                        <div id="endpoints">
-                            <h2>Endpoints</h2>
-                            
-                            <div class="endpoint-doc">
+                        <!-- Módulos em Desenvolvimento -->
+                        <div id="modulos-desenvolvimento" class="mt-4">
+                            <h2>Módulos em Desenvolvimento</h2>
+
+                            <div id="manutencoes" class="mb-4">
+                                <h3>Gestão de Manutenções</h3>
+                                <ul>
+                                    <li>Programação de manutenções preventivas</li>
+                                    <li>Controle de periodicidade</li>
+                                    <li>Histórico de manutenções</li>
+                                    <li>Alertas e notificações</li>
+                                </ul>
+                            </div>
+
+                            <div id="ordens-servico" class="mb-4">
+                                <h3>Ordens de Serviço</h3>
+                                <ul>
+                                    <li>Abertura de OS</li>
+                                    <li>Acompanhamento de execução</li>
+                                    <li>Registro de atividades</li>
+                                    <li>Relatórios de serviço</li>
+                                </ul>
+                            </div>
+
+                            <div id="faturamento" class="mb-4">
+                                <h3>Faturamento</h3>
+                                <ul>
+                                    <li>Geração de faturas</li>
+                                    <li>Controle de pagamentos</li>
+                                    <li>Relatórios financeiros</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- APIs -->
+                        <div id="apis" class="mt-4">
+                            <h2>APIs Implementadas</h2>
+
+                            <div class="api-docs mb-4">
                                 <h3>Autenticação</h3>
                                 <pre><code class="language-http">
-POST /api/v1/auth/login
+POST /api/login.php
 Content-Type: application/json
 
 {
-    "username": "string",
-    "password": "string"
-}
-                                </code></pre>
-                                
-                                <h4>Resposta</h4>
-                                <pre><code class="language-json">
-{
-    "sucesso": true,
-    "token": "string",
-    "usuario": {
-        "id": "number",
-        "nome": "string",
-        "username": "string",
-        "email": "string",
-        "nivel": "string",
-        "ativo": "boolean"
-    }
-}
-                                </code></pre>
-                            </div>
-
-                            <div class="endpoint-doc">
-                                <h3>Usuários</h3>
-                                
-                                <h4>Listar Usuários</h4>
-                                <pre><code class="language-http">
-GET /api/v1/usuarios
-Authorization: Bearer {token}
-                                </code></pre>
-                                
-                                <h4>Criar Usuário</h4>
-                                <pre><code class="language-http">
-POST /api/v1/usuarios
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-    "nome": "string",
-    "username": "string",
     "email": "string",
-    "senha": "string",
-    "nivel": "string",
-    "ativo": "boolean"
+    "senha": "string"
 }
                                 </code></pre>
                             </div>
-                        </div>
-                    </section>
 
-                    <!-- Módulos JavaScript -->
-                    <section id="modulos-js" class="mb-5">
-                        <h1>Módulos JavaScript</h1>
-
-                        <div id="auth-module">
-                            <h2>Módulo de Autenticação (auth.js)</h2>
-                            <div class="code-doc">
-                                <pre><code class="language-javascript">
-    // Estrutura do Módulo Auth
-    const Auth = {
-        token: localStorage.getItem('token'),
-        usuario: JSON.parse(localStorage.getItem('usuario')),
-
-        checkAuth() { ... },
-        login(username, password) { ... },
-        logout() { ... }
-    };
-                                </code></pre>
-
-                                <table class="table mt-3">
-                                    <thead>
-                                        <tr>
-                                            <th>Método</th>
-                                            <th>Descrição</th>
-                                            <th>Parâmetros</th>
-                                            <th>Retorno</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><code>checkAuth()</code></td>
-                                            <td>Verifica se o usuário está autenticado</td>
-                                            <td>Nenhum</td>
-                                            <td>Boolean</td>
-                                        </tr>
-                                        <tr>
-                                            <td><code>login(username, password)</code></td>
-                                            <td>Realiza autenticação do usuário</td>
-                                            <td>username: string, password: string</td>
-                                            <td>Promise<AuthResponse></td>
-                                        </tr>
-                                        <tr>
-                                            <td><code>logout()</code></td>
-                                            <td>Encerra a sessão do usuário</td>
-                                            <td>Nenhum</td>
-                                            <td>void</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div id="api-module">
-                            <h2>Módulo API (api.js)</h2>
-                            <div class="code-doc">
-                                <pre><code class="language-javascript">
-    // Estrutura do Módulo API
-    const Api = {
-        baseUrl: '/api/v1',
-        
-        getHeaders() { ... },
-        
-        Usuarios: {
-            listar() { ... },
-            criar(usuario) { ... },
-            atualizar(id, usuario) { ... },
-            excluir(id) { ... }
-        }
-    };
-                                </code></pre>
-
-                                <h3>Interfaces</h3>
-                                <pre><code class="language-typescript">
-    // Tipos de dados
-    interface Usuario {
-        id?: number;
-        nome: string;
-        username: string;
-        email: string;
-        senha?: string;
-        nivel: 'admin' | 'usuario';
-        ativo: boolean;
-    }
-
-    interface ApiResponse<T> {
-        sucesso: boolean;
-        mensagem?: string;
-        dados?: T;
-    }
+                            <div class="api-docs mb-4">
+                                <h3>Usuários</h3>
+                                <pre><code class="language-http">
+GET    /api/usuarios/listar.php
+POST   /api/usuarios/criar.php
+PUT    /api/usuarios/atualizar.php
+DELETE /api/usuarios/excluir.php
                                 </code></pre>
                             </div>
-                        </div>
 
-                        <div id="usuarios-module">
-                            <h2>Controlador de Usuários (usuarios.js)</h2>
-                            <div class="code-doc">
-                                <h3>Fluxo de Operações</h3>
-                                <div class="diagram">
-                                    <pre class="mermaid">
-                                    stateDiagram-v2
-                                        [*] --> Init
-                                        Init --> CarregaUsuarios
-                                        CarregaUsuarios --> ListaUsuarios
-                                        ListaUsuarios --> NovoUsuario
-                                        ListaUsuarios --> EditarUsuario
-                                        ListaUsuarios --> ExcluirUsuario
-                                        NovoUsuario --> SalvarUsuario
-                                        EditarUsuario --> SalvarUsuario
-                                        SalvarUsuario --> CarregaUsuarios
-                                        ExcluirUsuario --> CarregaUsuarios
-                                    </pre>
-                                </div>
-
-                                <h3>Métodos Principais</h3>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Método</th>
-                                            <th>Descrição</th>
-                                            <th>Eventos Disparados</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><code>init()</code></td>
-                                            <td>Inicializa o controlador</td>
-                                            <td>DOMContentLoaded</td>
-                                        </tr>
-                                        <tr>
-                                            <td><code>loadUsuarios()</code></td>
-                                            <td>Carrega lista de usuários</td>
-                                            <td>renderTable</td>
-                                        </tr>
-                                        <tr>
-                                            <td><code>handleSubmit()</code></td>
-                                            <td>Processa envio do formulário</td>
-                                            <td>submit</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="api-docs mb-4">
+                                <h3>Clientes</h3>
+                                <pre><code class="language-http">
+GET    /api/clientes/listar.php
+POST   /api/clientes/criar.php
+PUT    /api/clientes/atualizar.php
+DELETE /api/clientes/excluir.php
+                                </code></pre>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Guia de Instalação -->
-                    <section id="instalacao" class="mb-5">
-                        <h1>Guia de Instalação</h1>
-
-                        <div id="requisitos">
-                            <h2>Requisitos do Sistema</h2>
-                            <ul>
-                                <li>PHP 8.1 ou superior</li>
-                                <li>MySQL 8.0 ou superior</li>
-                                <li>Apache/Nginx com mod_rewrite</li>
-                                <li>Composer (Gerenciador de dependências PHP)</li>
-                                <li>Node.js e NPM (opcional, para desenvolvimento)</li>
-                            </ul>
-                        </div>
-
-                        <div id="passo-a-passo">
-                            <h2>Passo a Passo</h2>
-                            
-                            <h3>1. Clonar o Repositório</h3>
-                            <pre><code class="language-bash">
-git clone https://github.com/seu-usuario/bid-system.git
-cd bid-system
-                            </code></pre>
-
-                            <h3>2. Configurar o Ambiente</h3>
-                            <pre><code class="language-bash">
-# Copiar arquivo de configuração
-cp .env.example .env
-
-# Editar configurações
-nano .env
-                            </code></pre>
-
-                            <h3>3. Instalar Dependências</h3>
-                            <pre><code class="language-bash">
-# Instalar dependências PHP
-composer install
-
-# Instalar dependências frontend (opcional)
-npm install
-                            </code></pre>
-
-                            <h3>4. Configurar Banco de Dados</h3>
-                            <pre><code class="language-sql">
--- Criar banco de dados
-CREATE DATABASE bid_system;
-
--- Importar estrutura
-mysql -u root -p bid_system < database/structure.sql
-
--- Importar dados iniciais
-mysql -u root -p bid_system < database/seeds.sql
-                            </code></pre>
-                        </div>
+                    <!-- Próximos Passos -->
+                    <section id="proximos-passos" class="mb-5">
+                        <h1>Próximos Passos</h1>
+                        <ol>
+                            <li>Implementação completa do módulo de manutenções preventivas</li>
+                            <li>Desenvolvimento do sistema de ordens de serviço</li>
+                            <li>Implementação do módulo de faturamento</li>
+                            <li>Melhorias no dashboard com foco em indicadores de manutenção</li>
+                            <li>Implementação de relatórios específicos para manutenção</li>
+                            <li>Sistema de alertas e notificações para manutenções programadas</li>
+                        </ol>
                     </section>
 
                     <!-- Segurança -->
                     <section id="seguranca" class="mb-5">
-                        <h1>Documentação de Segurança</h1>
-
-                        <div id="autenticacao-seguranca">
-                            <h2>Autenticação e Autorização</h2>
-                            
-                            <h3>JWT (JSON Web Tokens)</h3>
-                            <ul>
-                                <li>Tokens com expiração de 24 horas</li>
-                                <li>Refresh tokens para renovação automática</li>
-                                <li>Blacklist de tokens revogados</li>
-                            </ul>
-
-                            <h3>Níveis de Acesso</h3>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Nível</th>
-                                        <th>Permissões</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Administrador</td>
-                                        <td>Acesso total ao sistema</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Usuário</td>
-                                        <td>Acesso limitado a funcionalidades básicas</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div id="boas-praticas">
-                            <h2>Boas Práticas de Segurança</h2>
-                            <ul>
-                                <li>Sanitização de inputs</li>
-                                <li>Prevenção contra XSS</li>
-                                <li>Proteção contra CSRF</li>
-                                <li>Rate limiting nas APIs</li>
-                                <li>Logs de segurança</li>
-                            </ul>
-                        </div>
-                    </section>
-
-                    <!-- Funcionalidades Principais -->
-                    <section id="funcionalidades-principais" class="mb-5">
-                        <h1>Funcionalidades Principais</h1>
-
-                        <!-- Dashboard -->
-                        <div id="dashboard-details" class="mb-4">
-                            <h2>Dashboard</h2>
-                            <p>Painel principal com visão geral do sistema, apresentando:</p>
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5>Indicadores Principais</h5>
-                                            <ul>
-                                                <li>Total de Clientes Ativos</li>
-                                                <li>Contratos em Vigência</li>
-                                                <li>Ordens de Serviço em Aberto</li>
-                                                <li>Faturas Pendentes</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="diagram">
-                                        <pre class="mermaid">
-                                        graph TD
-                                            A[Dashboard] --> B[Clientes]
-                                            A --> C[Contratos]
-                                            A --> D[OS]
-                                            A --> E[Faturas]
-                                            B --> F[Total Ativos]
-                                            C --> G[Em Vigência]
-                                            D --> H[Em Aberto]
-                                            E --> I[Pendentes]
-                                        </pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Gestão de Usuários -->
-                        <div id="usuarios-details" class="mb-4">
-                            <h2>Gestão de Usuários</h2>
-                            <p>Sistema completo de gerenciamento de usuários com as seguintes operações:</p>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>CRUD de Usuários</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <h6>Create (Criar)</h6>
-                                            <pre><code class="language-javascript">
-// Exemplo de criação de usuário
-async criarUsuario(usuario) {
-    try {
-        const response = await Api.Usuarios.criar(usuario);
-        if (response.sucesso) {
-            await this.loadUsuarios();
-            Notify.success('Usuário cadastrado com sucesso!');
-        }
-    } catch (error) {
-        Notify.error('Erro ao cadastrar usuário');
-    }
-}
-                                            </code></pre>
-
-                                            <h6>Read (Ler)</h6>
-                                            <pre><code class="language-javascript">
-// Exemplo de listagem de usuários
-async loadUsuarios() {
-    const response = await Api.Usuarios.listar();
-    if (response.sucesso) {
-        this.usuarios = response.dados;
-        this.renderTable();
-    }
-}
-                                            </code></pre>
-
-                                            <h6>Update (Atualizar)</h6>
-                                            <pre><code class="language-javascript">
-// Exemplo de atualização de usuário
-async atualizarUsuario(id, usuario) {
-    const response = await Api.Usuarios.atualizar(id, usuario);
-    if (response.sucesso) {
-        await this.loadUsuarios();
-        Notify.success('Usuário atualizado com sucesso!');
-    }
-}
-                                            </code></pre>
-
-                                            <h6>Delete (Excluir)</h6>
-                                            <pre><code class="language-javascript">
-// Exemplo de exclusão de usuário
-async delete(id) {
-    if (confirm('Confirma exclusão?')) {
-        const response = await Api.Usuarios.excluir(id);
-        if (response.sucesso) {
-            await this.loadUsuarios();
-            Notify.success('Usuário excluído com sucesso!');
-        }
-    }
-}
-                                            </code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="diagram">
-                                        <pre class="mermaid">
-                                        sequenceDiagram
-                                            participant U as Interface
-                                            participant C as Controller
-                                            participant A as API
-                                            participant D as Database
-
-                                            U->>C: Ação do Usuário
-                                            C->>A: Requisição
-                                            A->>D: Query
-                                            D-->>A: Resultado
-                                            A-->>C: Resposta
-                                            C-->>U: Atualização UI
-                                        </pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Gestão de Clientes -->
-                        <div id="clientes-details" class="mb-4">
-                            <h2>Gestão de Clientes</h2>
-                            <p>Sistema de cadastro e gerenciamento de clientes seguindo o mesmo padrão do módulo de usuários:</p>
-
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Campos do Cadastro</h5>
-                                    <ul>
-                                        <li>Nome/Razão Social</li>
-                                        <li>CPF/CNPJ</li>
-                                        <li>Endereço Completo</li>
-                                        <li>Contatos (telefone, email)</li>
-                                        <li>Status (ativo/inativo)</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="diagram mt-3">
-                                <pre class="mermaid">
-                                classDiagram
-                                    class Cliente {
-                                        +int id
-                                        +string nome
-                                        +string documento
-                                        +string endereco
-                                        +string telefone
-                                        +string email
-                                        +bool ativo
-                                        +create()
-                                        +update()
-                                        +delete()
-                                    }
-                                </pre>
-                            </div>
-                        </div>
-
-                        <!-- Gestão Documental -->
-                        <div id="documentos-details" class="mb-4">
-                            <h2>Gestão Documental</h2>
-                            
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Contratos</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul>
-                                                <li>Geração automática</li>
-                                                <li>Versionamento</li>
-                                                <li>Controle de vigência</li>
-                                                <li>Histórico de alterações</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Ordens de Serviço</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul>
-                                                <li>Abertura/Fechamento</li>
-                                                <li>Atribuição de responsável</li>
-                                                <li>Controle de status</li>
-                                                <li>Histórico de atendimento</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Faturas</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul>
-                                                <li>Geração automática</li>
-                                                <li>Controle de vencimentos</li>
-                                                <li>Status de pagamento</li>
-                                                <li>Relatórios financeiros</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="diagram mt-4">
-                                <pre class="mermaid">
-                                flowchart TD
-                                    A[Cliente] --> B[Contrato]
-                                    B --> C[Ordem de Serviço]
-                                    C --> D[Fatura]
-                                    
-                                    B --> E[Vigência]
-                                    C --> F[Status]
-                                    D --> G[Pagamento]
-                                </pre>
-                            </div>
-                        </div>
-
-                        <!-- Adicionar na seção apropriada ou criar uma nova -->
-                        <section id="dashboard">
-                            <h2>Dashboard</h2>
-                            <p>O Dashboard é a tela principal do sistema, apresentando uma visão geral das informações mais relevantes.</p>
-
-                            <h3>Funcionalidades</h3>
-                            
-                            <h4>1. Calendário</h4>
-                            <div class="content-block">
-                                <p>Calendário interativo para visualização de eventos como contratos, ordens de serviço e faturas.</p>
-                                
-                                <h5>Tecnologias Utilizadas</h5>
-                                <ul>
-                                    <li>HTML5</li>
-                                    <li>CSS3 (com classes utilitárias do Tailwind e Bootstrap)</li>
-                                    <li>JavaScript (Vanilla/ES6+)</li>
-                                </ul>
-
-                                <h5>Características</h5>
-                                <ul>
-                                    <li>Visualização mensal</li>
-                                    <li>Indicadores visuais por tipo de evento:
-                                        <ul>
-                                            <li>Contratos (azul)</li>
-                                            <li>Ordens de Serviço (verde)</li>
-                                            <li>Faturas (vermelho)</li>
-                                        </ul>
-                                    </li>
-                                    <li>Navegação entre meses</li>
-                                    <li>Destaque para o dia atual</li>
-                                    <li>Modal para detalhes dos eventos</li>
-                                    <li>Design responsivo</li>
-                                    <li>Animações suaves</li>
-                                </ul>
-
-                                <h5>Estrutura de Arquivos</h5>
-                                <pre><code>
-bid/
-├── assets/
-│   ├── css/
-│   │   └── calendar.css    # Estilos específicos do calendário
-│   └── js/
-│       └── calendar.js     # Classe Calendar e funcionalidades
-└── pages/
-    └── dashboard.html      # Implementação do calendário
-            </code></pre>
-
-                                <h5>Implementação</h5>
-                                <p>O calendário é implementado através de uma classe JavaScript que gerencia:</p>
-                                <ul>
-                                    <li>Renderização do grid de dias</li>
-                                    <li>Gerenciamento de eventos</li>
-                                    <li>Navegação entre meses</li>
-                                    <li>Interatividade com usuário</li>
-                                </ul>
-
-                                <h5>Dependências</h5>
-                                <ul>
-                                    <li>Bootstrap 5 (estilos base e componentes)</li>
-                                    <li>Tailwind CSS (utilitários e customizações)</li>
-                                    <li>Font Awesome (ícones)</li>
-                                </ul>
-
-                                <h5>Manutenção</h5>
-                                <p>Para adicionar ou modificar eventos, utilize o objeto events na classe Calendar:</p>
-                                <pre><code class="language-javascript">
-this.events = {
-    'YYYY-MM-DD': { 
-        type: 'contrato|os|fatura', 
-        title: 'Descrição do Evento' 
-    }
-};
-                                </code></pre>
-                            </div>
-
-                            <!-- Outras funcionalidades do Dashboard podem ser documentadas aqui -->
-                        </section>
+                        <h1>Considerações de Segurança</h1>
+                        <ul>
+                            <li>Autenticação via token JWT</li>
+                            <li>Validação de entrada em todas as APIs</li>
+                            <li>Sanitização de dados</li>
+                            <li>Sistema de logs para auditoria</li>
+                            <li>Controle de acesso baseado em perfis</li>
+                            <li>Proteção contra ataques comuns (XSS, CSRF, SQL Injection)</li>
+                        </ul>
                     </section>
                 </div>
             </main>
@@ -966,4 +282,4 @@ this.events = {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="assets/js/docs.js"></script>
 </body>
-</html> 
+</html>
