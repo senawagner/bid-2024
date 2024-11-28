@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste POST</title>
+</head>
+<body>
+    <h2>Teste de POST</h2>
+    <form id="testForm">
+        <div>
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" value="teste">
+        </div>
+        <div>
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" value="123">
+        </div>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/api/test_post.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                document.getElementById('resultado').textContent = JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('resultado').textContent = 'Erro: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html> 

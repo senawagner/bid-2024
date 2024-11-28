@@ -1,0 +1,35 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Permitir CORS
+    Header set Access-Control-Allow-Origin "http://bid.test"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    Header set Access-Control-Allow-Credentials "true"
+    
+    # Proteger diretórios do sistema
+    RewriteRule ^api/(config|classes|cron)/ - [F,L]
+    
+    # Redirecionar para login se não estiver autenticado
+    # Exceto para a própria página de login e recursos públicos
+    RewriteCond %{REQUEST_URI} !^/pages/login\.html
+    RewriteCond %{REQUEST_URI} !^/api/login\.php
+    RewriteCond %{REQUEST_URI} !^/assets/
+    RewriteCond %{HTTP_AUTHORIZATION} !^Bearer\s+.+ [NC]
+    RewriteRule ^pages/ /pages/login.html [L,R]
+    
+    # Redirecionar todas as requisições para a versão atual se não especificada
+    RewriteCond %{REQUEST_URI} !^/api/v\d+/
+    RewriteRule ^api/(.*)$ api/v1/$1 [L]
+    
+    # Permitir apenas versões válidas
+    RewriteCond %{REQUEST_URI} ^/api/(v\d+)/
+    RewriteCond %{REQUEST_URI} !^/api/(v1)/ [NC]
+    RewriteRule ^ - [R=400,L]
+    
+    # Força o Content-Type para JSON nas APIs
+    <FilesMatch "^api/v1/.*\.php$">
+        Header set Content-Type application/json
+    </FilesMatch>
+</IfModule> 

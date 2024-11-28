@@ -1,0 +1,123 @@
+# Estrutura de Arquivos do Projeto BID
+Atualizado em: 27/11/2024 20:07:46
+
+```
+- api/
+  - auth/
+    - auth.php
+    - login.php
+    - reset_admin.php
+  - clientes/
+    - ClienteModel.php
+    - buscar.php
+    - excluir.php
+    - listar.php
+    - salvar.php
+  - config/
+    - api.php
+    - database.php
+  - dashboard/
+    - stats.php
+  - index.php
+  - log.php
+  - login.php
+  - test_db.php
+  - test_log.php
+  - test_post.log
+  - test_post.php
+  - usuarios/
+    - UsuarioModel.php
+    - buscar.php
+    - excluir.php
+    - listar.php
+    - salvar.php
+- assets/
+  - css/
+    - calendar.css
+    - output.css
+    - tailwind.css
+  - js/
+    - api.js
+    - auth.js
+    - calendar.js
+    - controllers/
+      - ClienteController.js
+      - UsuarioController.js
+    - dashboard.js
+    - login.js
+    - services/
+      - ClienteService.js
+      - UsuarioService.js
+    - toast.js
+    - usuarios.js
+    - utils/
+      - Logger.js
+      - README.md
+- dist/
+  - css/
+    - adminlte.min.css
+  - js/
+    - adminlte.min.js
+- docs/
+  - assets/
+    - css/
+      - code-doc.css
+      - docs.css
+    - diagrams/
+    - images/
+    - js/
+      - docs.js
+  - coddarco_bid.sql
+  - cronograma.md
+  - file_estrutura.md
+  - index.html
+  - modulos/
+    - clientes/
+      - README.md
+    - contratos/
+      - README.md
+    - dashboard/
+      - README.md
+    - faturas/
+      - README.md
+    - ordens_servico/
+      - README.md
+- generate_structure.php
+- index.html
+- package-lock.json
+- package.json
+- pages/
+  - clientes copy.html
+  - clientes.html
+  - contratos.html
+  - dashboard.html
+  - faturas.html
+  - forgot-password.html
+  - login.html
+  - ordens-servico.html
+  - reset-password.html
+  - usuarios.html
+- plugins/
+  - bootstrap/
+    - css/
+      - bootstrap.min.css
+    - js/
+      - bootstrap.bundle.min.js
+  - chart.js/
+    - chart.min.js
+  - fontawesome-free/
+    - css/
+      - all.min.css
+      - fontawesome.min.css
+    - webfonts/
+      - fa-regular-400.woff2
+      - fa-solid-900.woff2
+  - jquery/
+    - jquery.min.js
+- postcss.config.js
+- setup.php
+- tailwind.config.js
+- test_post.html
+- test_usuarios.html
+- test_usuarios_crud.html
+```

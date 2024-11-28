@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BID System</title>
+    <link rel="stylesheet" href="/assets/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/adminlte.min.css">
+    <style>
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="spinner">
+            <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+            <p class="mt-2">Verificando sessão...</p>
+        </div>
+    </div>
+
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/adminlte.min.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const auth = Auth || window.Auth;
+                if (!auth) {
+                    throw new Error('Módulo de autenticação não encontrado');
+                }
+
+                const isAuthenticated = await auth.verificarAuth();
+                console.log('Status de autenticação:', isAuthenticated);
+                
+                // O próprio verificarAuth já faz o redirecionamento necessário
+            } catch (error) {
+                console.error('Erro ao verificar sessão:', error);
+                // Em caso de erro, redireciona para login
+                window.location.href = '/pages/login.html';
+            }
+        });
+    </script>
+</body>
+</html>

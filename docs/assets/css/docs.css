@@ -1,0 +1,132 @@
+/* Estilos gerais */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    background-color: #f8f9ff;
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.sidebar .nav-link.active {
+    color: #5047e0;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(80, 71, 224, 0.05);
+}
+
+/* Conteúdo principal */
+main {
+    padding-top: 30px;
+}
+
+/* Títulos */
+h1 {
+    color: #5047e0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(80, 71, 224, 0.1);
+}
+
+h2 {
+    color: #2d2a6b;
+    margin: 2rem 0 1rem;
+}
+
+/* Código */
+pre {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+/* Tabelas */
+.table {
+    margin-top: 1rem;
+}
+
+/* Imagens */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+}
+
+/* Diagrams */
+.diagram {
+    background: #fff;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+/* Atualizar cor da navbar */
+.navbar-dark {
+    background-color: #5047e0 !important;
+}
+
+/* Ajustar cor dos links na navbar */
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+/* Ajustar cor do brand */
+.navbar-dark .navbar-brand {
+    color: #ffffff;
+}
+
+/* Adicionar sombra suave na navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(80, 71, 224, 0.1);
+}
+
+/* Ajustar cor de fundo do sidebar para combinar */
+.sidebar {
+    background-color: #f8f9ff;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(80, 71, 224, 0.05);
+}
+
+.sidebar .nav-link.active {
+    color: #5047e0;
+}
+
+/* Ajustar cores dos títulos para combinar */
+h1 {
+    color: #5047e0;
+    border-bottom-color: rgba(80, 71, 224, 0.1);
+}
+
+h2 {
+    color: #2d2a6b;
+}
+
+/* Ajustar cor dos links */
+a {
+    color: #5047e0;
+}
+
+a:hover {
+    color: #403ac2;
+} 

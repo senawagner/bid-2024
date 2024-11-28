@@ -1,0 +1,109 @@
+<!-- pages/login.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BID</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Faça login para iniciar sua sessão</p>
+
+                <form id="formLogin">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Usuário" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <!-- Scripts da aplicação -->
+    <script src="../assets/js/toast.js"></script>
+    <script>
+        // Configuração do Toastr
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right"
+        };
+
+        // Manipulador do formulário
+        document.getElementById('formLogin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btnSubmit = e.target.querySelector('button[type="submit"]');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+            
+            try {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                console.log('Tentando login com:', { username });
+                
+                const response = await axios.post('/api/auth/login.php', {
+                    username,
+                    password
+                });
+
+                console.log('Resposta do servidor:', response.data);
+
+                if (response.data.success) {
+                    console.log('Login bem sucedido, salvando dados...');
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('usuario', JSON.stringify(response.data.usuario));
+                    console.log('Dados salvos, redirecionando...');
+                    window.location.href = 'dashboard.html';
+                } else {
+                    console.error('Erro no login:', response.data.message);
+                    toastr.error(response.data.message || 'Erro ao fazer login');
+                }
+               
+            } catch (error) {
+                console.error('Erro completo:', error);
+                console.error('Response data:', error.response?.data);
+                console.error('Status code:', error.response?.status);
+                toastr.error(error.response?.data?.message || 'Erro ao conectar com o servidor');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = 'Entrar';
+            }
+        });
+    </script>
+</body>
+</html>
+

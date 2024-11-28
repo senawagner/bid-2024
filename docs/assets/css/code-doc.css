@@ -1,0 +1,41 @@
+.code-doc {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.code-doc pre {
+    margin: 0;
+    padding: 1rem;
+    background: #2d2d2d;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.code-doc .table {
+    margin-top: 1.5rem;
+}
+
+.endpoint-doc {
+    margin-bottom: 2rem;
+}
+
+.endpoint-doc h4 {
+    color: #666;
+    margin-top: 1rem;
+}
+
+.method-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.method-get { background: #61affe; color: #fff; }
+.method-post { background: #49cc90; color: #fff; }
+.method-put { background: #fca130; color: #fff; }
+.method-delete { background: #f93e3e; color: #fff; } 
