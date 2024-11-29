@@ -15,6 +15,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- AdminLTE -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -106,28 +108,64 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <table id="tabelaContratos" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Nº Contrato</th>
-                                            <th>Cliente</th>
-                                            <th>Valor</th>
-                                            <th>Data Início</th>
-                                            <th>Data Fim</th>
-                                            <th>Status</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Preenchido via JavaScript -->
-                                    </tbody>
-                                </table>
+                <!-- Filtros -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filterCliente">Cliente</label>
+                                    <select class="form-control" id="filterCliente">
+                                        <option value="">Todos</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filterTipo">Tipo de Contrato</label>
+                                    <select class="form-control" id="filterTipo">
+                                        <option value="">Todos</option>
+                                        <option value="manutencao">Manutenção</option>
+                                        <option value="servico">Serviço</option>
+                                        <option value="projeto">Projeto</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filterStatus">Status</label>
+                                    <select class="form-control" id="filterStatus">
+                                        <option value="">Todos</option>
+                                        <option value="ativo">Ativo</option>
+                                        <option value="pendente">Pendente</option>
+                                        <option value="cancelado">Cancelado</option>
+                                        <option value="finalizado">Finalizado</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Tabela -->
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tabelaContratos" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nº Contrato</th>
+                                    <th>Cliente</th>
+                                    <th>Valor</th>
+                                    <th>Data Início</th>
+                                    <th>Data Fim</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Preenchido via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -139,7 +177,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalContratoTitle">Novo Contrato</h5>
+                    <h5 class="modal-title">Contrato</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -148,24 +186,24 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="numeroContrato">Número do Contrato</label>
-                                    <input type="text" class="form-control" id="numeroContrato" required>
+                                    <label for="cliente">Cliente</label>
+                                    <select class="form-control" id="cliente" required>
+                                        <option value="">Selecione...</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="clienteId">Cliente</label>
-                                    <select class="form-control" id="clienteId" required>
-                                        <option value="">Selecione um cliente</option>
-                                    </select>
+                                    <label for="numeroContrato">Número do Contrato</label>
+                                    <input type="text" class="form-control" id="numeroContrato" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="valor">Valor</label>
-                                    <input type="text" class="form-control" id="valor" required>
+                                    <label for="valorTotal">Valor Total</label>
+                                    <input type="text" class="form-control" id="valorTotal" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -181,15 +219,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select class="form-control" id="status" required>
+                                        <option value="ativo">Ativo</option>
                                         <option value="pendente">Pendente</option>
-                                        <option value="aprovado">Aprovado</option>
-                                        <option value="rejeitado">Rejeitado</option>
                                         <option value="cancelado">Cancelado</option>
+                                        <option value="finalizado">Finalizado</option>
                                     </select>
                                 </div>
                             </div>
@@ -200,38 +238,75 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="descricao">Descrição</label>
-                            <textarea class="form-control" id="descricao" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="observacoes">Observações</label>
-                            <textarea class="form-control" id="observacoes" rows="3"></textarea>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="btnSalvarContrato">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2024 BID System</strong>
-        Todos os direitos reservados.
-    </footer>
 </div>
 
 <!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-<script src="../assets/js/contratos.js"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+<!-- Toastr -->
+<script src="../plugins/toastr/toastr.min.js"></script>
+<!-- Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Logger -->
+<script src="../assets/js/utils/Logger.js"></script>
+<!-- Toast -->
+<script src="../assets/js/toast.js"></script>
+<!-- Formatters -->
+<script src="../assets/js/utils/formatters.js"></script>
+<!-- Auth -->
+<script type="module">
+    import Auth from '../assets/js/auth.js';
+    window.Auth = Auth;
+    Logger.debug('Auth module carregado');
+</script>
+<!-- Contratos Service -->
+<script src="../assets/js/services/ContratosService.js"></script>
+<!-- Contratos Controller -->
+<script src="../assets/js/controllers/ContratosController.js"></script>
 
+<!-- Configuração do Toastr -->
+<script>
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        timeOut: 3000
+    };
+</script>
+
+<!-- Inicialização -->
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            Logger.info('Iniciando página de contratos');
+            const authResult = await Auth.verificarAuth();
+            if (!authResult) {
+                Logger.error('Falha na autenticação');
+                return;
+            }
+            Logger.info('Autenticação bem sucedida, iniciando controller');
+            window.contratosController = new ContratosController();
+        } catch (error) {
+            Logger.error('Erro na inicialização da página', error);
+            Toast.error('Erro ao carregar a página');
+        }
+    });
+</script>
 </body>
 </html>

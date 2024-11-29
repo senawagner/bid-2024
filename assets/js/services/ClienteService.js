@@ -16,16 +16,39 @@ class ClienteService {
             Logger.debug('Iniciando listagem de clientes');
             await this.verificarAutenticacao();
             
+            Logger.debug('Fazendo requisição para a API');
             const response = await axios.get(`${this.baseUrl}/listar.php`);
+            Logger.debug('Resposta da API', { 
+                status: response.status,
+                statusText: response.statusText,
+                data: response.data
+            });
+            
             if (!response.data || !response.data.success) {
+                Logger.error('Resposta da API indica erro', response.data);
                 throw new Error(response.data?.message || 'Erro ao listar clientes');
             }
             
-            Logger.debug('Clientes listados com sucesso', { count: response.data.data?.length });
-            return Array.isArray(response.data.data) ? response.data.data : [];
+            if (!Array.isArray(response.data.data)) {
+                Logger.error('Dados retornados não são um array', response.data);
+                throw new Error('Formato de dados inválido');
+            }
+            
+            Logger.debug('Clientes listados com sucesso', { count: response.data.data.length });
+            return response.data.data;
         } catch (error) {
-            Logger.error('Erro ao listar clientes', error);
-            throw error;
+            if (error.response) {
+                Logger.error('Erro na resposta da API', {
+                    status: error.response.status,
+                    statusText: error.response.statusText,
+                    data: error.response.data
+                });
+            } else if (error.request) {
+                Logger.error('Sem resposta da API', { request: error.request });
+            } else {
+                Logger.error('Erro ao fazer requisição', { message: error.message });
+            }
+            throw new Error('Erro ao listar clientes');
         }
     }
 

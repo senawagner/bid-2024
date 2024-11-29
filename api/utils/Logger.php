@@ -6,6 +6,9 @@ class Logger {
     private static function initialize() {
         if (self::$initialized) return;
 
+        // Define o fuso horário para Brasil/São Paulo
+        date_default_timezone_set('America/Sao_Paulo');
+
         // Cria o diretório de logs se não existir
         $logDir = __DIR__ . '/../../logs';
         if (!file_exists($logDir)) {

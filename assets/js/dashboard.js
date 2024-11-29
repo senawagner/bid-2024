@@ -1,28 +1,36 @@
 // Verifica autenticação
-Auth.verificarAuth();
+// Auth.verificarAuth();
 
 // Carrega o nome do usuário
-document.getElementById('userName').textContent = Auth.getUserName();
+// document.getElementById('userName').textContent = Auth.getUserName();
 
 // Função para carregar dados do dashboard
 async function carregarDados() {
     try {
         Logger.info('Carregando dados do dashboard...');
         
-        const response = await axios.get('/api/dashboard/stats');
+        const response = await axios.get('../api/v1/dashboard/stats');
         const data = response.data;
         
+        if (!data.success) {
+            throw new Error(data.message || 'Erro ao carregar dados');
+        }
+        
         // Atualiza os totais
-        document.getElementById('totalClientes').textContent = data.totalClientes || 0;
-        document.getElementById('totalContratos').textContent = data.totalContratos || 0;
-        document.getElementById('totalOrdens').textContent = data.totalOrdens || 0;
-        document.getElementById('totalFaturas').textContent = data.totalFaturas || 0;
+        const stats = data.data;
+        document.getElementById('totalClientes').textContent = stats.totalClientes || 0;
+        document.getElementById('totalContratos').textContent = stats.totalContratos || 0;
+        document.getElementById('totalOrdens').textContent = stats.totalOrdens || 0;
+        document.getElementById('totalFaturas').textContent = stats.totalFaturas || 0;
         
         Logger.info('Dados do dashboard carregados com sucesso');
-        Toast.success('Dashboard atualizado');
     } catch (error) {
         Logger.error('Erro ao carregar dados do dashboard:', error);
-        Toast.error('Erro ao carregar dados do dashboard');
+        if (error.response?.status === 401) {
+            Auth.verificarAuth();
+        } else {
+            Toast.error('Erro ao carregar dados do dashboard');
+        }
     }
 }
 
@@ -31,12 +39,16 @@ async function carregarEventos() {
     try {
         Logger.info('Carregando eventos do calendário...');
         
-        const response = await axios.get('/api/dashboard/events');
-        const events = response.data;
+        const response = await axios.get('../api/v1/dashboard/events');
+        const data = response.data;
+        
+        if (!data.success) {
+            throw new Error(data.message || 'Erro ao carregar eventos');
+        }
         
         // Atualiza os eventos do calendário
         if (window.calendar) {
-            window.calendar.events = events;
+            window.calendar.events = data.data;
             window.calendar.render();
             Logger.info('Eventos do calendário carregados com sucesso');
         } else {
@@ -44,27 +56,47 @@ async function carregarEventos() {
         }
     } catch (error) {
         Logger.error('Erro ao carregar eventos do calendário:', error);
-        Toast.error('Erro ao carregar eventos do calendário');
+        if (error.response?.status === 401) {
+            Auth.verificarAuth();
+        } else {
+            Toast.error('Erro ao carregar eventos do calendário');
+        }
     }
 }
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        Logger.info('Inicializando dashboard...');
+        Logger.info('Iniciando dashboard...');
         
+        // Espera o Auth estar disponível
+        let attempts = 0;
+        while (!window.Auth && attempts < 10) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+
+        if (!window.Auth) {
+            throw new Error('Módulo Auth não carregado após 1 segundo');
+        }
+
+        // Verifica autenticação
+        const authResult = await window.Auth.verificarAuth();
+        if (!authResult) {
+            Logger.error('Falha na autenticação');
+            return;
+        }
+
+        // Carrega o nome do usuário
+        document.getElementById('userName').textContent = window.Auth.getUserName();
+
         // Carrega dados iniciais
         await carregarDados();
-        
-        // Inicializa o calendário
-        window.calendar = new Calendar();
-        
-        // Carrega eventos do calendário
         await carregarEventos();
         
         Logger.info('Dashboard inicializado com sucesso');
     } catch (error) {
         Logger.error('Erro ao inicializar dashboard:', error);
-        Toast.error('Erro ao inicializar dashboard');
+        Toast.error('Erro ao carregar o dashboard');
     }
 });

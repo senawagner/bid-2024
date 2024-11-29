@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentação - BID System</title>
+    <title>Documentação Técnica - BID System</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,267 +12,460 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs2015.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/docs.css">
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 48px 0 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+            overflow-y: auto;
+        }
+        
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        main {
+            padding-top: 48px;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .nav-link {
+            padding: .5rem 1rem;
+            color: #333;
+        }
+        
+        .nav-link:hover {
+            color: #007bff;
+        }
+        
+        code {
+            color: #e83e8c;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">BID System - Documentação</a>
+            <a class="navbar-brand" href="#">BID System - Documentação Técnica</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#visao-geral">Visão Geral</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#stack">Stack Tecnológico</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#arquitetura">Arquitetura</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#funcionalidades">Funcionalidades</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </nav>
 
-    <!-- Sidebar -->
     <div class="container-fluid">
         <div class="row">
+            <!-- Sidebar -->
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-                <div class="position-sticky pt-5">
+                <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#visao-geral">
-                                Visão Geral
-                            </a>
+                            <a class="nav-link" href="#visao-geral">Visão Geral</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#arquitetura">Arquitetura</a>
                             <ul class="nav flex-column ms-3">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#descricao">Descrição</a>
+                                    <a class="nav-link" href="#mvc-service">MVC + Service</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#objetivos">Objetivos</a>
+                                    <a class="nav-link" href="#estrutura-arquivos">Estrutura de Arquivos</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#stack">
-                                Stack Tecnológico
-                            </a>
+                            <a class="nav-link" href="#autenticacao">Autenticação</a>
                             <ul class="nav flex-column ms-3">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#frontend">Frontend</a>
+                                    <a class="nav-link" href="#auth-module">Módulo Auth</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#backend">Backend</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#bibliotecas">Bibliotecas</a>
+                                    <a class="nav-link" href="#token-handling">Token Handling</a>
                                 </li>
                             </ul>
                         </li>
-                        <!-- ... continua ... -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#frontend">Frontend</a>
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#controllers">Controllers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#services">Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#utils">Utils</a>
+                                    <ul class="nav flex-column ms-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#toast">Toast</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#logger">Logger</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#backend">Backend</a>
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#api">API</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#database">Database</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#modulos">Módulos</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
 
             <!-- Conteúdo Principal -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="pt-5">
-                    <!-- Visão Geral -->
-                    <section id="visao-geral" class="mb-5">
-                        <h1>Visão Geral</h1>
-                        <div id="descricao">
-                            <p>O BID System é um sistema de gerenciamento de manutenções preventivas desenvolvido para otimizar e controlar processos de manutenção em equipamentos e instalações. O sistema oferece uma solução completa para planejamento, execução e acompanhamento de manutenções preventivas.</p>
+                <!-- Visão Geral -->
+                <section id="visao-geral" class="mb-5">
+                    <h1 class="border-bottom pb-2">Visão Geral</h1>
+                    <p>O BID System é um sistema de gerenciamento de contratos e manutenções preventivas. Esta documentação técnica detalha a arquitetura, padrões e implementações do sistema.</p>
+                </section>
+
+                <!-- Arquitetura -->
+                <section id="arquitetura" class="mb-5">
+                    <h1 class="border-bottom pb-2">Arquitetura</h1>
+                    
+                    <div id="mvc-service">
+                        <h2>Padrão MVC + Service</h2>
+                        <p>O sistema utiliza uma arquitetura MVC estendida com uma camada de Service:</p>
+                        <ul>
+                            <li><strong>Model:</strong> Representação dos dados e regras de negócio</li>
+                            <li><strong>View:</strong> Interface do usuário (HTML)</li>
+                            <li><strong>Controller:</strong> Gerenciamento de eventos e UI</li>
+                            <li><strong>Service:</strong> Lógica de negócios e comunicação com API</li>
+                        </ul>
+                    </div>
+
+                    <div id="estrutura-arquivos" class="mt-4">
+                        <h2>Estrutura de Arquivos</h2>
+                        <pre><code>
+/bid
+├── /api
+│   ├── /v1
+│   │   ├── /auth
+│   │   ├── /clientes
+│   │   └── /contratos
+│   ├── /config
+│   └── /utils
+├── /assets
+│   ├── /css
+│   ├── /js
+│   │   ├── /controllers
+│   │   ├── /services
+│   │   └── /utils
+│   └── /vendor
+├── /docs
+└── /pages</code></pre>
+                    </div>
+                </section>
+
+                <!-- Autenticação -->
+                <section id="autenticacao" class="mb-5">
+                    <h1 class="border-bottom pb-2">Autenticação</h1>
+                    
+                    <div id="auth-module">
+                        <h2>Módulo Auth</h2>
+                        <p>O módulo de autenticação é implementado como um ES6 module:</p>
+                        <pre><code class="javascript">
+// auth.js
+const Auth = {
+    async verificarAuth() {
+        // Verifica token e redireciona se necessário
+    },
+    
+    get token() {
+        return localStorage.getItem('token');
+    },
+    
+    get usuario() {
+        return JSON.parse(localStorage.getItem('usuario'));
+    }
+};
+
+export default Auth;</code></pre>
+                    </div>
+
+                    <div id="token-handling" class="mt-4">
+                        <h2>Token Handling</h2>
+                        <p>Implementação do interceptor Axios para tokens:</p>
+                        <pre><code class="javascript">
+axios.interceptors.request.use(config => {
+    const token = Auth.token;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});</code></pre>
+                    </div>
+                </section>
+
+                <!-- Frontend -->
+                <section id="frontend" class="mb-5">
+                    <h1 class="border-bottom pb-2">Frontend</h1>
+                    
+                    <div id="controllers">
+                        <h2>Controllers</h2>
+                        <p>Padrão para implementação de controllers:</p>
+                        <pre><code class="javascript">
+class ModuloController {
+    constructor() {
+        this.service = new ModuloService();
+        this.initEventListeners();
+        this.initDataTable();
+    }
+
+    async listar() {
+        try {
+            const data = await this.service.listar();
+            this.dataTable.clear().rows.add(data).draw();
+        } catch (error) {
+            Logger.error('Erro ao listar', error);
+        }
+    }
+}</code></pre>
+                    </div>
+
+                    <div id="services" class="mt-4">
+                        <h2>Services</h2>
+                        <p>Padrão para implementação de services:</p>
+                        <pre><code class="javascript">
+class ModuloService {
+    constructor() {
+        this.baseUrl = '../api/v1/modulo';
+    }
+
+    async listar() {
+        await Auth.verificarAuth();
+        const response = await axios.get(this.baseUrl);
+        return response.data;
+    }
+}</code></pre>
+                    </div>
+
+                    <div id="utils" class="mt-4">
+                        <h2>Utils</h2>
+                        <p>Utilitários padrão do sistema:</p>
+                        <div id="toast">
+                            <h3>Toast</h3>
+                            <p>O sistema utiliza um wrapper personalizado para o Toastr, localizado em <code>/assets/js/toast.js</code>, que fornece uma interface consistente para notificações visuais.</p>
                             
-                            <h2>Objetivos Principais</h2>
+                            <h4>Configuração Global</h4>
+                            <pre><code class="javascript">
+// Configuração do Toastr
+toastr.options = {
+    closeButton: true,      // Botão para fechar notificação
+    debug: false,           // Modo debug desativado
+    newestOnTop: true,      // Novas notificações aparecem no topo
+    progressBar: true,      // Barra de progresso
+    positionClass: "toast-top-right",  // Posição no canto superior direito
+    preventDuplicates: false,  // Permite duplicatas
+    showDuration: "300",    // Duração da animação de entrada
+    hideDuration: "1000",   // Duração da animação de saída
+    timeOut: "5000",        // Tempo que a notificação fica visível
+    extendedTimeOut: "1000" // Tempo extra ao passar o mouse
+};</code></pre>
+
+                            <h4>Interface do Toast</h4>
+                            <p>O objeto Toast expõe quatro métodos principais para diferentes tipos de notificações:</p>
+                            <pre><code class="javascript">
+const Toast = {
+    // Mensagem de sucesso (verde)
+    success(message) {
+        toastr.success(message);
+        Logger.info(`Toast Success: ${message}`);
+    },
+
+    // Mensagem de erro (vermelho)
+    error(message) {
+        toastr.error(message);
+        Logger.error(`Toast Error: ${message}`);
+    },
+
+    // Mensagem de alerta (amarelo)
+    warning(message) {
+        toastr.warning(message);
+        Logger.warn(`Toast Warning: ${message}`);
+    },
+
+    // Mensagem informativa (azul)
+    info(message) {
+        toastr.info(message);
+        Logger.info(`Toast Info: ${message}`);
+    }
+};</code></pre>
+
+                            <h4>Uso</h4>
+                            <p>Para usar o Toast em qualquer módulo do sistema:</p>
+                            <pre><code class="javascript">
+// Sucesso
+Toast.success('Operação realizada com sucesso!');
+
+// Erro
+Toast.error('Erro ao processar requisição');
+
+// Alerta
+Toast.warning('Atenção: dados incompletos');
+
+// Informação
+Toast.info('Carregando dados...');</code></pre>
+
+                            <h4>Integração com Logger</h4>
+                            <p>Cada chamada ao Toast também registra a mensagem no Logger do sistema, facilitando o debug e monitoramento:</p>
                             <ul>
-                                <li>Gerenciar cronogramas de manutenção preventiva</li>
-                                <li>Controlar ordens de serviço de manutenção</li>
-                                <li>Acompanhar histórico de manutenções</li>
-                                <li>Gerenciar equipes e recursos</li>
-                                <li>Gerar relatórios e indicadores de desempenho</li>
+                                <li>success → Logger.info</li>
+                                <li>error → Logger.error</li>
+                                <li>warning → Logger.warn</li>
+                                <li>info → Logger.info</li>
+                            </ul>
+
+                            <h4>Dependências</h4>
+                            <p>O Toast depende dos seguintes arquivos:</p>
+                            <pre><code class="plaintext">
+/assets
+  /js
+    /utils
+      /Logger.js    - Para logging
+    /toast.js      - Implementação principal
+/plugins
+  /toastr         - Biblioteca Toastr</code></pre>
+                        </div>
+                        <div id="logger" class="mt-4">
+                            <h3>Logger</h3>
+                            <p>Sistema de logging padrão do sistema:</p>
+                            <ul>
+                                <li><strong>Logger:</strong> Sistema de logging</li>
                             </ul>
                         </div>
+                    </div>
+                </section>
 
-                        <div id="stack-tecnologico" class="mt-4">
-                            <h2>Stack Tecnológico</h2>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h3>Frontend</h3>
-                                    <ul>
-                                        <li>HTML5</li>
-                                        <li>JavaScript (ES6+)</li>
-                                        <li>AdminLTE 3 (Bootstrap)</li>
-                                        <li>Tailwind CSS</li>
-                                        <li>Bibliotecas: Axios, jQuery, Toastr, Chart.js</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <h3>Backend</h3>
-                                    <ul>
-                                        <li>PHP 8.3.13</li>
-                                        <li>MySQL</li>
-                                        <li>RESTful API</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                <!-- Backend -->
+                <section id="backend" class="mb-5">
+                    <h1 class="border-bottom pb-2">Backend</h1>
+                    
+                    <div id="api">
+                        <h2>API</h2>
+                        <p>Estrutura padrão dos endpoints:</p>
+                        <pre><code class="php">
+<?php
+require_once '../../config/database.php';
+require_once '../../utils/Logger.php';
+require_once '../../auth/auth.php';
 
-                    <!-- Funcionalidades -->
-                    <section id="funcionalidades" class="mb-5">
-                        <h1>Funcionalidades do Sistema</h1>
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
 
-                        <!-- Módulos Implementados -->
-                        <div id="modulos-implementados">
-                            <h2>Módulos Implementados</h2>
+// Verifica autenticação
+Auth::verificarAuth();
 
-                            <div id="autenticacao" class="mb-4">
-                                <h3>Sistema de Autenticação</h3>
-                                <ul>
-                                    <li>Login de usuários</li>
-                                    <li>Recuperação de senha</li>
-                                    <li>Proteção de rotas</li>
-                                    <li>Autenticação baseada em token</li>
-                                    <li>Sistema de logging</li>
-                                </ul>
-                            </div>
+try {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    
+    // Lógica do endpoint
+    
+    echo json_encode([
+        'success' => true,
+        'data' => $result
+    ]);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
+}</code></pre>
+                    </div>
 
-                            <div id="usuarios" class="mb-4">
-                                <h3>Gestão de Usuários</h3>
-                                <ul>
-                                    <li>CRUD completo de usuários</li>
-                                    <li>Controle de acesso baseado em perfis</li>
-                                    <li>Interface de gerenciamento</li>
-                                </ul>
-                            </div>
+                    <div id="database" class="mt-4">
+                        <h2>Database</h2>
+                        <p>Padrão Singleton para conexão com banco de dados:</p>
+                        <pre><code class="php">
+class Database {
+    private static $instance = null;
+    private $conn = null;
+    
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+    
+    public function connect() {
+        if ($this->conn === null) {
+            $this->conn = new PDO(/* config */);
+        }
+        return $this->conn;
+    }
+}</code></pre>
+                    </div>
+                </section>
 
-                            <div id="dashboard" class="mb-4">
-                                <h3>Dashboard</h3>
-                                <ul>
-                                    <li>Visão geral do sistema</li>
-                                    <li>Widgets informativos</li>
-                                    <li>Calendário de manutenções</li>
-                                    <li>Estatísticas em tempo real</li>
-                                </ul>
-                            </div>
-
-                            <div id="clientes" class="mb-4">
-                                <h3>Gestão de Clientes</h3>
-                                <ul>
-                                    <li>Cadastro completo</li>
-                                    <li>Listagem e busca</li>
-                                    <li>Edição e exclusão</li>
-                                    <li>Visualização detalhada</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Módulos em Desenvolvimento -->
-                        <div id="modulos-desenvolvimento" class="mt-4">
-                            <h2>Módulos em Desenvolvimento</h2>
-
-                            <div id="manutencoes" class="mb-4">
-                                <h3>Gestão de Manutenções</h3>
-                                <ul>
-                                    <li>Programação de manutenções preventivas</li>
-                                    <li>Controle de periodicidade</li>
-                                    <li>Histórico de manutenções</li>
-                                    <li>Alertas e notificações</li>
-                                </ul>
-                            </div>
-
-                            <div id="ordens-servico" class="mb-4">
-                                <h3>Ordens de Serviço</h3>
-                                <ul>
-                                    <li>Abertura de OS</li>
-                                    <li>Acompanhamento de execução</li>
-                                    <li>Registro de atividades</li>
-                                    <li>Relatórios de serviço</li>
-                                </ul>
-                            </div>
-
-                            <div id="faturamento" class="mb-4">
-                                <h3>Faturamento</h3>
-                                <ul>
-                                    <li>Geração de faturas</li>
-                                    <li>Controle de pagamentos</li>
-                                    <li>Relatórios financeiros</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- APIs -->
-                        <div id="apis" class="mt-4">
-                            <h2>APIs Implementadas</h2>
-
-                            <div class="api-docs mb-4">
-                                <h3>Autenticação</h3>
-                                <pre><code class="language-http">
-POST /api/login.php
-Content-Type: application/json
-
-{
-    "email": "string",
-    "senha": "string"
-}
-                                </code></pre>
-                            </div>
-
-                            <div class="api-docs mb-4">
-                                <h3>Usuários</h3>
-                                <pre><code class="language-http">
-GET    /api/usuarios/listar.php
-POST   /api/usuarios/criar.php
-PUT    /api/usuarios/atualizar.php
-DELETE /api/usuarios/excluir.php
-                                </code></pre>
-                            </div>
-
-                            <div class="api-docs mb-4">
-                                <h3>Clientes</h3>
-                                <pre><code class="language-http">
-GET    /api/clientes/listar.php
-POST   /api/clientes/criar.php
-PUT    /api/clientes/atualizar.php
-DELETE /api/clientes/excluir.php
-                                </code></pre>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Próximos Passos -->
-                    <section id="proximos-passos" class="mb-5">
-                        <h1>Próximos Passos</h1>
-                        <ol>
-                            <li>Implementação completa do módulo de manutenções preventivas</li>
-                            <li>Desenvolvimento do sistema de ordens de serviço</li>
-                            <li>Implementação do módulo de faturamento</li>
-                            <li>Melhorias no dashboard com foco em indicadores de manutenção</li>
-                            <li>Implementação de relatórios específicos para manutenção</li>
-                            <li>Sistema de alertas e notificações para manutenções programadas</li>
-                        </ol>
-                    </section>
-
-                    <!-- Segurança -->
-                    <section id="seguranca" class="mb-5">
-                        <h1>Considerações de Segurança</h1>
-                        <ul>
-                            <li>Autenticação via token JWT</li>
-                            <li>Validação de entrada em todas as APIs</li>
-                            <li>Sanitização de dados</li>
-                            <li>Sistema de logs para auditoria</li>
-                            <li>Controle de acesso baseado em perfis</li>
-                            <li>Proteção contra ataques comuns (XSS, CSRF, SQL Injection)</li>
-                        </ul>
-                    </section>
-                </div>
+                <!-- Módulos -->
+                <section id="modulos" class="mb-5">
+                    <h1 class="border-bottom pb-2">Módulos do Sistema</h1>
+                    
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Módulo</th>
+                                    <th>Status</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Autenticação</td>
+                                    <td><span class="badge bg-success">Completo</span></td>
+                                    <td>Sistema de login e controle de acesso</td>
+                                </tr>
+                                <tr>
+                                    <td>Clientes</td>
+                                    <td><span class="badge bg-success">Completo</span></td>
+                                    <td>Gestão de clientes e contratos</td>
+                                </tr>
+                                <tr>
+                                    <td>Contratos</td>
+                                    <td><span class="badge bg-warning">Em Desenvolvimento</span></td>
+                                    <td>Gestão de contratos de manutenção</td>
+                                </tr>
+                                <tr>
+                                    <td>Manutenções</td>
+                                    <td><span class="badge bg-secondary">Planejado</span></td>
+                                    <td>Controle de manutenções preventivas</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             </main>
         </div>
     </div>
@@ -280,6 +473,8 @@ DELETE /api/clientes/excluir.php
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="assets/js/docs.js"></script>
+    <script>
+        hljs.highlightAll();
+    </script>
 </body>
 </html>

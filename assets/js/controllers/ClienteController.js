@@ -195,10 +195,29 @@ class ClienteController {
             Logger.debug('Editando cliente', { id });
             const cliente = await this.service.buscar(id);
             if (cliente) {
-                Object.keys(cliente).forEach(key => {
-                    const input = document.getElementById(key);
+                // Limpar o formulário antes de preencher
+                const form = document.getElementById('formCliente');
+                if (form) {
+                    form.reset();
+                }
+
+                // Preencher todos os campos com os dados do cliente
+                const campos = [
+                    'id', 'razaoSocial', 'nomeFantasia', 'cnpj', 'inscricaoEstadual',
+                    'email', 'telefone', 'celular', 'cep', 'endereco', 'numero',
+                    'complemento', 'bairro', 'cidade', 'estado', 'observacoes'
+                ];
+
+                campos.forEach(campo => {
+                    const input = document.getElementById(campo);
                     if (input) {
-                        input.value = cliente[key] || '';
+                        // Mapear os campos do banco para os campos do formulário
+                        const valorCampo = campo === 'razaoSocial' ? cliente.razao_social :
+                                         campo === 'nomeFantasia' ? cliente.nome_fantasia :
+                                         campo === 'inscricaoEstadual' ? cliente.inscricao_estadual :
+                                         cliente[campo.toLowerCase()] || '';
+                        
+                        input.value = valorCampo;
                         if (visualizar) {
                             input.disabled = true;
                         }
@@ -320,12 +339,12 @@ class ClienteController {
                 id: document.getElementById('id').value,
                 razao_social: document.getElementById('razaoSocial').value,
                 nome_fantasia: document.getElementById('nomeFantasia').value,
-                cnpj: document.getElementById('cnpj').value,
+                cnpj: document.getElementById('cnpj').value.replace(/[^\d]+/g, ''),
                 inscricao_estadual: document.getElementById('inscricaoEstadual').value,
                 email: document.getElementById('email').value,
                 telefone: document.getElementById('telefone').value,
                 celular: document.getElementById('celular').value,
-                cep: document.getElementById('cep').value,
+                cep: document.getElementById('cep').value.replace(/[^\d]+/g, ''),
                 endereco: document.getElementById('endereco').value,
                 numero: document.getElementById('numero').value,
                 complemento: document.getElementById('complemento').value,
@@ -335,27 +354,32 @@ class ClienteController {
                 observacoes: document.getElementById('observacoes').value
             };
 
+            Logger.debug('Dados do formulário:', dados);
+
             const response = await this.service.salvar(dados);
+            Logger.debug('Resposta do servidor:', response);
             
             if (response.success) {
-                const modal = document.getElementById('modalCliente');
-                if (modal) {
-                    const modalInstance = bootstrap.Modal.getInstance(modal);
-                    if (modalInstance) {
-                        modalInstance.hide();
-                    } else {
-                        $(modal).modal('hide');
-                    }
-                }
+                // Atualizar a tabela primeiro
                 await this.carregarClientes();
+                
+                // Limpar o formulário
+                form.reset();
+                document.getElementById('id').value = '';
+                
+                // Fechar o modal por último
+                $('#modalCliente').modal('hide');
+                
                 Toast.success(response.message || 'Cliente salvo com sucesso');
+            } else {
+                throw new Error(response.message || 'Erro ao salvar cliente');
             }
         } catch (error) {
             Logger.error('Erro ao salvar cliente', error);
             if (error.response?.data?.message) {
                 Toast.error(error.response.data.message);
             } else {
-                Toast.error('Erro ao salvar cliente');
+                Toast.error(error.message || 'Erro ao salvar cliente');
             }
         }
     }

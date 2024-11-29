@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . '/../config/log.php';
 
 class ClienteModel {
     private $db;
@@ -15,24 +16,30 @@ class ClienteModel {
      */
     public function listar() {
         try {
-            error_log("=== INÍCIO LISTAGEM ===");
+            SystemLogger::info("Iniciando listagem de clientes");
             
             $sql = "SELECT * FROM clientes 
                     WHERE ativo = 1 
                     ORDER BY razao_social ASC";
             
-            error_log("SQL: " . $sql);
+            SystemLogger::debug("Executando query", ['sql' => $sql]);
             
-            $result = $this->db->query($sql);
-            error_log("Total de registros: " . count($result));
-            error_log("=== FIM LISTAGEM ===");
+            $db = Database::getInstance();
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            SystemLogger::info("Clientes listados com sucesso", ['count' => count($result)]);
             
             return $result;
             
         } catch (Exception $e) {
-            error_log("=== ERRO NA LISTAGEM ===");
-            error_log("Erro: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
+            SystemLogger::error("Erro ao listar clientes", [
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
             throw new Exception("Erro ao listar clientes: " . $e->getMessage());
         }
     }
@@ -124,21 +131,25 @@ class ClienteModel {
             
             $sql = "SELECT 
                 (SELECT COUNT(*) FROM contratos 
-                 WHERE cliente_id = :id 
+                 WHERE cliente_id = :id1 
                  AND status NOT IN ('rejeitado', 'cancelado')) +
                 (SELECT COUNT(*) FROM ordens_servico 
-                 WHERE cliente_id = :id 
+                 WHERE cliente_id = :id2 
                  AND status NOT IN ('cancelada')
                  AND deleted_at IS NULL) +
                 (SELECT COUNT(*) FROM faturas 
-                 WHERE cliente_id = :id 
+                 WHERE cliente_id = :id3 
                  AND status NOT IN ('cancelada')
                  AND deleted_at IS NULL) as total";
             
             error_log("SQL: " . $sql);
-            error_log("Parâmetros: " . json_encode(['id' => $id]));
+            error_log("Parâmetros: " . json_encode(['id1' => $id, 'id2' => $id, 'id3' => $id]));
             
-            $result = $this->db->query($sql, ['id' => $id]);
+            $result = $this->db->query($sql, [
+                'id1' => $id,
+                'id2' => $id,
+                'id3' => $id
+            ]);
             $total = (int)($result[0]['total'] ?? 0);
             
             error_log("Total de registros vinculados: " . $total);
@@ -207,50 +218,100 @@ class ClienteModel {
      * @return int ID do cliente
      */
     public function salvar(array $dados): int {
+        SystemLogger::info("Iniciando processo de salvamento", ['dados' => $dados]);
+        
         try {
-            // Se tem ID, atualiza
-            if (!empty($dados['id'])) {
+            $db = Database::getInstance();
+            
+            // Lista de campos permitidos
+            $campos_permitidos = [
+                'razao_social', 'nome_fantasia', 'cnpj', 'inscricao_estadual',
+                'telefone', 'celular', 'email', 'endereco', 'numero', 'complemento',
+                'bairro', 'cidade', 'estado', 'cep', 'observacoes'
+            ];
+            
+            // Filtra apenas os campos permitidos
+            $params = array_intersect_key($dados, array_flip($campos_permitidos));
+            
+            // Verifica se é uma atualização ou inserção
+            if (isset($dados['id']) && !empty($dados['id'])) {
+                SystemLogger::debug("Atualizando cliente existente", ['id' => $dados['id']]);
+                
                 $sql = "UPDATE clientes SET 
-                        razao_social = :razao_social,
-                        nome_fantasia = :nome_fantasia,
-                        cnpj = :cnpj,
-                        inscricao_estadual = :inscricao_estadual,
-                        telefone = :telefone,
-                        celular = :celular,
-                        email = :email,
-                        endereco = :endereco,
-                        numero = :numero,
-                        complemento = :complemento,
-                        bairro = :bairro,
-                        cidade = :cidade,
-                        estado = :estado,
-                        cep = :cep,
-                        observacoes = :observacoes,
-                        atualizado_em = CURRENT_TIMESTAMP
-                        WHERE id = :id 
-                        AND ativo = 1";
-                        
-                $this->db->execute($sql, $dados);
-                return (int)$dados['id'];
+                    razao_social = :razao_social,
+                    nome_fantasia = :nome_fantasia,
+                    cnpj = :cnpj,
+                    inscricao_estadual = :inscricao_estadual,
+                    telefone = :telefone,
+                    celular = :celular,
+                    email = :email,
+                    endereco = :endereco,
+                    numero = :numero,
+                    complemento = :complemento,
+                    bairro = :bairro,
+                    cidade = :cidade,
+                    estado = :estado,
+                    cep = :cep,
+                    observacoes = :observacoes,
+                    atualizado_em = CURRENT_TIMESTAMP
+                WHERE id = :id 
+                AND ativo = 1";
+                
+                // Adiciona o ID aos parâmetros para a cláusula WHERE
+                $params['id'] = $dados['id'];
                 
             } else {
-                // Se não tem ID, insere
+                SystemLogger::debug("Inserindo novo cliente");
+                
                 $sql = "INSERT INTO clientes (
-                        razao_social, nome_fantasia, cnpj, inscricao_estadual,
-                        telefone, celular, email, endereco, numero, complemento,
-                        bairro, cidade, estado, cep, observacoes, criado_em, atualizado_em
-                        ) VALUES (
-                        :razao_social, :nome_fantasia, :cnpj, :inscricao_estadual,
-                        :telefone, :celular, :email, :endereco, :numero, :complemento,
-                        :bairro, :cidade, :estado, :cep, :observacoes, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-                        )";
-                        
-                $this->db->execute($sql, $dados);
-                return $this->db->lastInsertId();
+                    razao_social, nome_fantasia, cnpj, inscricao_estadual,
+                    telefone, celular, email, endereco, numero, complemento,
+                    bairro, cidade, estado, cep, observacoes, criado_em, atualizado_em
+                ) VALUES (
+                    :razao_social, :nome_fantasia, :cnpj, :inscricao_estadual,
+                    :telefone, :celular, :email, :endereco, :numero, :complemento,
+                    :bairro, :cidade, :estado, :cep, :observacoes, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+                )";
             }
+            
+            // Sanitiza os dados antes de inserir
+            foreach ($params as $key => $value) {
+                if ($value === '') {
+                    $params[$key] = null;
+                }
+                if ($key === 'cnpj') {
+                    $params[$key] = preg_replace('/\D/', '', $value);
+                }
+            }
+            
+            SystemLogger::debug("Executando query", ['sql' => $sql, 'params' => $params]);
+            
+            $stmt = $db->prepare($sql);
+            $result = $stmt->execute($params);
+            
+            if (!$result) {
+                SystemLogger::error("Erro ao executar query", [
+                    'error_info' => $stmt->errorInfo(),
+                    'sql' => $sql,
+                    'params' => $params
+                ]);
+                throw new Exception("Erro ao salvar cliente: " . implode(" - ", $stmt->errorInfo()));
+            }
+            
+            $id = isset($dados['id']) ? $dados['id'] : $db->lastInsertId();
+            SystemLogger::info("Cliente salvo com sucesso", ['id' => $id]);
+            
+            return (int)$id;
+            
         } catch (Exception $e) {
-            error_log("Erro ao salvar cliente: " . $e->getMessage());
-            throw new Exception("Erro ao salvar cliente");
+            SystemLogger::error("Exceção ao salvar cliente", [
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
     }
 } 

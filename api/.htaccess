@@ -1,0 +1,15 @@
+RewriteEngine On
+RewriteBase /api/
+
+# Permitir acesso direto a arquivos existentes
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Redirecionar todas as outras requisições para o index.php
+RewriteRule ^(.*)$ /api/index.php [L,QSA]
+
+# Headers para JSON e CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+Header set Content-Type "application/json" env=REDIRECT_STATUS
