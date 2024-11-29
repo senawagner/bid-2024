@@ -430,8 +430,99 @@ class Database {
 
                 <!-- Módulos -->
                 <section id="modulos" class="mb-5">
-                    <h1 class="border-bottom pb-2">Módulos do Sistema</h1>
+                    <h2 class="border-bottom pb-2">Módulos do Sistema</h2>
                     
+                    <!-- Módulo de Clientes -->
+                    <article id="modulo-clientes" class="mb-4">
+                        <h3>Módulo de Clientes</h3>
+                        <p>Gerenciamento completo de clientes do sistema, incluindo cadastro, edição, listagem e exclusão.</p>
+
+                        <h4>Atualizações e Melhorias (29/11/2024)</h4>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5>1. Correções de Interface</h5>
+                                <ul>
+                                    <li>Implementado ID único para o botão "Novo Cliente" (<code>btnNovoCliente</code>)</li>
+                                    <li>Melhorado layout usando grid system do Bootstrap</li>
+                                    <li>Corrigido seletor JavaScript para manipulação do botão</li>
+                                </ul>
+
+                                <h5>2. Otimização do Formulário</h5>
+                                <ul>
+                                    <li>Refatorado método <code>salvar()</code> para usar IDs específicos dos campos</li>
+                                    <li>Implementado mapeamento correto entre frontend (camelCase) e backend (snake_case)</li>
+                                    <li>Adicionado tratamento de máscaras para campos formatados:
+                                        <ul>
+                                            <li>CNPJ</li>
+                                            <li>CEP</li>
+                                            <li>Telefone</li>
+                                            <li>Celular</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <h5>3. Melhorias na Manipulação de Eventos</h5>
+                                <ul>
+                                    <li>Migrado listener do formulário para botão salvar específico</li>
+                                    <li>Implementado logging detalhado para debug</li>
+                                    <li>Adicionado tratamento robusto de erros</li>
+                                    <li>Incluído verificação de null/undefined com operador opcional (<code>?.</code>)</li>
+                                </ul>
+
+                                <h5>4. Segurança e Validação</h5>
+                                <ul>
+                                    <li>Implementado valores default para prevenir dados undefined</li>
+                                    <li>Adicionado sanitização de dados antes do envio ao servidor</li>
+                                    <li>Melhorado feedback de erros para o usuário</li>
+                                </ul>
+
+                                <h5>5. Próximas Melhorias Planejadas</h5>
+                                <ul>
+                                    <li>Validação de campos obrigatórios no frontend</li>
+                                    <li>Feedback visual durante operações de salvamento</li>
+                                    <li>Confirmação antes de fechar modal com dados não salvos</li>
+                                    <li>Cache local para otimização de performance</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h4>Estrutura do Módulo</h4>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <pre><code class="language-plaintext">
+/clientes
+├── ClienteController.js    # Controlador principal
+├── clientes.html          # Interface do usuário
+└── /api
+    ├── ClienteModel.php   # Modelo de dados
+    ├── buscar.php         # Endpoint de busca
+    ├── listar.php         # Endpoint de listagem
+    ├── salvar.php         # Endpoint de salvamento
+    └── excluir.php        # Endpoint de exclusão</code></pre>
+                            </div>
+                        </div>
+
+                        <h4>Exemplo de Uso do Controller</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <pre><code class="language-javascript">
+// Inicialização do controller
+const clienteController = new ClienteController();
+
+// Exemplo de salvamento
+async function salvarCliente() {
+    try {
+        await clienteController.salvar(event);
+        Toast.success('Cliente salvo com sucesso');
+    } catch (error) {
+        Toast.error('Erro ao salvar cliente');
+        Logger.error('Erro no salvamento', error);
+    }
+}</code></pre>
+                            </div>
+                        </div>
+                    </article>
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
