@@ -1,0 +1,29 @@
+[30-Nov-2024 18:08:25 America/Sao_Paulo] Iniciando processo de login
+[30-Nov-2024 18:08:25 America/Sao_Paulo] Dados recebidos: Array
+(
+    [username] => admin
+    [password] => senha123
+)
+
+[2024-11-30 18:08:25] [INFO] Iniciando conexão com o banco de dados
+[30-Nov-2024 18:08:25 America/Sao_Paulo] === INÍCIO DA CONEXÃO COM O BANCO ===
+[30-Nov-2024 18:08:25 America/Sao_Paulo] Tentando conectar ao banco: Host=186.209.113.109, Port=3306, Database=coddarco_bid
+[30-Nov-2024 18:08:25 America/Sao_Paulo] Conexão bem sucedida com o banco de dados
+[30-Nov-2024 18:08:25 America/Sao_Paulo] === FIM DA CONEXÃO COM O BANCO ===
+[2024-11-30 18:08:25] [INFO] Conexão estabelecida com sucesso
+[2024-11-30 18:08:25] [DEBUG] Preparando query | Context: {"query":"SELECT id, nome, username, email, senha, nivel, ativo \r\n            FROM usuarios \r\n            WHERE username = :username \r\n            AND ativo = 1\r\n            AND deleted_at IS NULL"}
+[30-Nov-2024 18:08:25 America/Sao_Paulo] === INÍCIO DO PREPARE ===
+[30-Nov-2024 18:08:25 America/Sao_Paulo] SQL a ser preparado: SELECT id, nome, username, email, senha, nivel, ativo 
+            FROM usuarios 
+            WHERE username = :username 
+            AND ativo = 1
+            AND deleted_at IS NULL
+[30-Nov-2024 18:08:25 America/Sao_Paulo] === FIM DO PREPARE ===
+[2024-11-30 18:08:25] [INFO] Query preparada com sucesso
+[30-Nov-2024 18:08:25 America/Sao_Paulo] Usuário encontrado: sim
+[2024-11-30 18:08:25] [DEBUG] Preparando query | Context: {"query":"INSERT INTO login_attempts (username, ip_address, created_at) \r\n            VALUES (:username, :ip, NOW())"}
+[30-Nov-2024 18:08:25 America/Sao_Paulo] === INÍCIO DO PREPARE ===
+[30-Nov-2024 18:08:25 America/Sao_Paulo] SQL a ser preparado: INSERT INTO login_attempts (username, ip_address, created_at) 
+            VALUES (:username, :ip, NOW())
+[30-Nov-2024 18:08:25 America/Sao_Paulo] === FIM DO PREPARE ===
+[2024-11-30 18:08:25] [INFO] Query preparada com sucesso
